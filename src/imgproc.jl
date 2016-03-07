@@ -161,6 +161,29 @@ function ellipse(image::Mat,
 
 end
 
+#=
+// C++: void putText(Mat& img, const string& text, Point org, int fontFace, double fontScale, Scalar color, int thickness=1, intlineType=8, bool bottomLeftOrigin=false )              
+extern "C" void putText(cv::Mat *img, const char* text, cv::Point org, int fontFace, int fontScale, int color, );
+=#
+
+function putText(image::Mat,
+                 text::AbstractString,
+                 org::cv2.Point,
+                 fontFace::Int64,
+                 fontScale::Float64,
+                 color::Tuple{Int64, Int64, Int64},
+                 thickness::Int64 = 1,
+                 lineType::Int64 = 8,
+                 bottomLeftOrigin::Bool = false)
+
+    colorPtr = convertColortoPtr(color)
+    cvOrg = cvPoint(org.x, org.y)
+    cvbottomLeftOrigin = Int(bottomLeftOrigin)
+    
+    ccall((:putText, "../libcv2.so"), Void, (Ptr{Void}, Ptr{Char}, Ptr{Void}, Int, Cdouble, Ptr{Void}, Int, Int, Cint),image.handle, pointer(text), cvOrg.handle, fontFace, fontScale, colorPtr, thickness, lineType, cvbottomLeftOrigin )
+
+end
+
 function polylines(image::Mat,
                    points::Array{cv2.Point, 1},
                    isClosed::Bool,

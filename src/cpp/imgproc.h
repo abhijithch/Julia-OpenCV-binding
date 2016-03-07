@@ -25,6 +25,9 @@ extern "C" void circle(cv::Mat *img, cv::Point *p1, int radius, int *color, int 
 // C++: void ellipse(Mat& img, Point center, Size axes, double angle, double startAngle, double endAngle, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
 extern "C" void ellipse(cv::Mat *img, cv::Point *p1, double angle, double startAngle, double endAngle, int *color, int thickness,int lineType, int shift);
 
+// C++: void putText(Mat& img, const string& text, Point org, int fontFace, double fontScale, Scalar color, int thickness=1, int lineType=8, bool bottomLeftOrigin=false )
+extern "C" void putText(cv::Mat *img, const char *text, cv::Point *org, int fontFace, double fontScale, int *color, int thickness, int lineType, int bottomLeftOrigin);
+
 // C++: void calcHist(const Mat* images, int nimages, const int* channels, InputArray mask, OutputArray hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false )
 extern "C" int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat *mask, int dims, const int* histSize, const double* ranges, bool uniform, bool accumulate);
 

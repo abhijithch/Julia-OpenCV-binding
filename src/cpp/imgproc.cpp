@@ -51,12 +51,22 @@ void circle(cv::Mat *img, cv::Point *p1, int radius, int *color, int thickness, 
 
 void ellipse(cv::Mat *img, cv::Point *p1, double angle, double startAngle, double endAngle, int *color, int thickness, int lineType, int shift)
 {
-  cv::ellipse(*img, *p1, cv::Size(5, 5), angle, startAngle, endAngle, cv::Scalar(color[0], color[1], color[2]));
+    cv::ellipse(*img, *p1, cv::Size(5, 5), angle, startAngle, endAngle, cv::Scalar(color[0], color[1], color[2]));
 }
 
 void line(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color, int thickness, int lineType, int shift)
 {
     cv::line(*img, *p1, *p2,  cv::Scalar(color[0], color[1], color[2]));
+}
+
+// C++: void putText(Mat& img, const string& text, Point org, int fontFace, double fontScale, Scalar color, int thickness=1, intlineType=8, bool bottomLeftOrigin=false )
+void putText(cv::Mat *img, const char *text, cv::Point *org, int fontFace, double fontScale, int *color, int thickness, int lineType, int bottomLeftOrigin)
+{
+    // Reconvert int to bool
+    bool bLO = false;
+    if (bottomLeftOrigin == 1)
+        bLO = true;
+    cv::putText(*img, cv::String(text), *org, fontFace, fontScale, cv::Scalar(color[0], color[1], color[2]), thickness, lineType, bLO);
 }
 
 void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)
