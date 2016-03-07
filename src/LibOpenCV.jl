@@ -6,6 +6,7 @@ include("config.jl")
 include("./Mat.jl")
 include("./highgui.jl")
 include("./imgproc.jl")
+include("./tracking.jl")
 
 const CV_8UC1 = 0
 const CV_8UC2 = 8
