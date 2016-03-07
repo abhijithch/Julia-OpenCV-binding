@@ -110,3 +110,8 @@ int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat 
   
      return histArray;
 }
+
+void _cvtColor(cv::_InputArray *src, cv::_OutputArray *dst, int code, int dstCn)
+{
+    cv::cvtColor(*src, *dst, code, dstCn);
+}

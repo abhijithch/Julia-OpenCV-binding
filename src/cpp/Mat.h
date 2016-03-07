@@ -233,5 +233,16 @@ extern "C" int type(cv::Mat *mat);
 // Done
 extern "C" cv::Mat* zeros(int rows, int cols, int type);
 
+
+
+/* Input and Output Array */
+
+extern "C" cv::_InputArray* createInputArray();
+extern "C" cv::_InputArray* createInputArrayWithMat(cv::Mat *);
+extern "C" void freeInputArray(cv::_InputArray *);
+extern "C" cv::_OutputArray* createOutputArray();
+extern "C" cv::_OutputArray* createOutputArrayWithMat(cv::Mat *);
+extern "C" void freeOutputArray(cv::_OutputArray *);
+
 #endif 
 // MAT_H

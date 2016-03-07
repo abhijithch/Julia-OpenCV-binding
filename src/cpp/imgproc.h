@@ -33,4 +33,8 @@ extern "C" int* calcHist(const cv::Mat** images, int nimages, const int* channel
 
 // C++: void split(const Mat& src, Mat* mvbegin)
 extern "C" cv::Mat** split(const cv::Mat *src);
+
+// C++: void cvtColor(InputArray src, OutputArray dst, int code, int dstCn=0)
+extern "C" void _cvtColor(cv::_InputArray *src, cv::_OutputArray *dst,
+			  int code, int dstCn);
 #endif

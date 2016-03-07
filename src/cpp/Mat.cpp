@@ -382,3 +382,37 @@ cv::Mat* Mat zeros(Size size, int type)
 {
 }
 */
+
+
+
+/* Input and Output Array */
+
+cv::_InputArray* createInputArray()
+{
+    return new cv::_InputArray();
+}
+
+cv::_InputArray* createInputArrayWithMat(cv::Mat *mat)
+{
+    return new cv::_InputArray(*mat);
+}
+
+void freeInputArray(cv::_InputArray *arr)
+{
+    delete arr;
+}
+
+cv::_OutputArray* createOutputArray()
+{
+    return new cv::_OutputArray();
+}
+
+cv::_OutputArray* createOutputArrayWithMat(cv::Mat *mat)
+{
+    return new cv::_OutputArray(*mat);
+}
+
+void freeOutputArray(cv::_OutputArray *arr)
+{
+    delete arr;
+}

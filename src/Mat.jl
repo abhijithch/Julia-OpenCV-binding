@@ -1,7 +1,7 @@
 import Base: getindex
 
 type Mat
-	handle::Ptr{Void}
+    handle::Ptr{Void}
 end
 
 type cvRange
@@ -142,3 +142,43 @@ getindex(img::Mat, channel::Int, i::Int, j::Int) = at(img, channel, i, j)
 function at(mat::Mat, channel::Int, i::Int, j::Int)
     ccall( (:at, cv2_lib), Int, (Ptr{Void}, Int, Int, Int), mat.handle, channel, i, j)
 end
+
+
+
+# Input and Output Array
+
+type InputArray
+    handle::Ptr{Void}
+end
+
+function InputArray(arr::InputArray)
+    finalizer(arr, x -> ccall((:freeInputArray, cv2_lib),
+                              Void, (Ptr{Void}, ), x.handle))
+    return arr
+end
+
+InputArray() = InputArray(InputArray(ccall((:createInputArray, cv2_lib),
+                                           Ptr{Void}, ())))
+
+InputArray(mat) = InputArray(InputArray(ccall((:createInputArrayWithMat, cv2_lib),
+                                              Ptr{Void}, (Ptr{Void}, ), mat.handle)))
+
+type OutputArray
+    handle::Ptr{Void}
+end
+
+function OutputArray(arr::OutputArray)
+    finalizer(arr, x -> ccall((:freeOutputArray, cv2_lib),
+                              Void, (Ptr{Void}, ), x.handle))
+    return arr
+end
+
+OutputArray() = OutputArray(OutputArray(ccall((:createOutputArray, cv2_lib),
+                                              Ptr{Void}, ())))
+
+OutputArray(mat) = OutputArray(OutputArray(ccall((:createOutputArrayWithMat, cv2_lib),
+                                                 Ptr{Void}, (Ptr{Void}, ), mat.handle)))
+
+cvtColor(inarr::InputArray, outarr::OutputArray, code, dstCn = 0) =
+    ccall((:_cvtColor, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Cint, ),
+          inarr.handle, outarr.handle, code, dstCn)

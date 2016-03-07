@@ -36,6 +36,8 @@ const CV_64FC2 = 14
 const CV_64FC3 = 22
 const CV_64FC4 = 30
 
+const CV_BGR2GRAY = 6
+
 end # cv2
 
 export cv2
