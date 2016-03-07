@@ -1,6 +1,6 @@
 #include "imgproc.h"
 #include <iostream>
-
+#include <stdio.h>
 // Note: I put some function that not belong the imgproc module.
 // This is just because I wrap those function in same time.
 // TODO: Reconstruct the file, correct the module function
@@ -12,21 +12,23 @@ cv::Point* setPoint(int x, int y)
     cv::Point *pt = new cv::Point(x, y);
     return pt;
 }
-
+/*
 cv::Mat** split(const cv::Mat *src)
 {
+  
     cv::Mat** imageArray = new cv::Mat*[src->channels()];
-    cv::Mat imageArrayTemp[src->channels()];
+    //cv::Mat imageArrayTemp[src->channels()];
+    cv::Mat** imageArrayTemp = new cv::Mat*[src->channels()];
     cv::split(*src, imageArrayTemp);
-
+  
     for (int i = 0; i < src->channels(); i++)
-    {
+      {
         imageArray[i] = new cv::Mat;
         imageArrayTemp[i].copyTo(*(imageArray[i]));
-    }
-
+      }
+  
     return imageArray;
-}
+    }*/
 
 cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderType)
 {
@@ -34,6 +36,27 @@ cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderType)
     cv::blur(*img, *result, cv::Size(5, 5), *anchor, borderType);
 
     return result;
+}
+
+void rectangle(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color, int thickness, int lineType, int shift)
+{
+    using namespace cv;
+    cv::rectangle(*img, *p1, *p2,  cv::Scalar(color[0], color[1], color[2]));
+}
+
+void circle(cv::Mat *img, cv::Point *p1, int radius, int *color, int thickness, int lineType, int shift)
+{
+    cv::circle(*img, *p1, radius,  cv::Scalar(color[0], color[1], color[2]));
+}
+
+void ellipse(cv::Mat *img, cv::Point *p1, double angle, double startAngle, double endAngle, int *color, int thickness, int lineType, int shift)
+{
+  cv::ellipse(*img, *p1, cv::Size(5, 5), angle, startAngle, endAngle, cv::Scalar(color[0], color[1], color[2]));
+}
+
+void line(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color, int thickness, int lineType, int shift)
+{
+    cv::line(*img, *p1, *p2,  cv::Scalar(color[0], color[1], color[2]));
 }
 
 void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)

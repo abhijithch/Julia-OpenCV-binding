@@ -13,6 +13,18 @@ extern "C" cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderT
 // C++: void polylines(Mat& img, const Point** pts, const int* npts, int ncontours, bool isClosed, const Scalar& color, int thickness=1, int lineType=8, int shift=0 )
 extern "C" void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift);
 
+// C++: void line(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+extern "C" void line(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color, int thickness,int lineType, int shift);
+
+// C++: void rectangle(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+extern "C" void rectangle(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color, int thickness,int lineType, int shift);
+
+// C++: void circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+extern "C" void circle(cv::Mat *img, cv::Point *p1, int radius, int *color, int thickness,int lineType, int shift);
+
+// C++: void ellipse(Mat& img, Point center, Size axes, double angle, double startAngle, double endAngle, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+extern "C" void ellipse(cv::Mat *img, cv::Point *p1, double angle, double startAngle, double endAngle, int *color, int thickness,int lineType, int shift);
+
 // C++: void calcHist(const Mat* images, int nimages, const int* channels, InputArray mask, OutputArray hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false )
 extern "C" int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat *mask, int dims, const int* histSize, const double* ranges, bool uniform, bool accumulate);
 
