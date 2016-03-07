@@ -29,9 +29,9 @@ cv::Mat* createMat3(cv::Size size, int type)
 */
 
 // C++: Mat::Mat(int rows, int cols, int type, Scalar s);
-cv::Mat* createMat4(int rows, int cols, int type, cv::Scalar s)
-{
-}
+// cv::Mat* createMat4(int rows, int cols, int type, cv::Scalar s)
+// {
+// }
 
 /*
 // C++: Mat::Mat(Size size, int type, Scalar s);
@@ -90,15 +90,15 @@ cv::Mat* cloneInWrap(cv::Mat *mat)
 
 // C++: Mat Mat::col(int x);
 // Could not solve it...
-cv::Mat* col(cv::Mat *mat, int x)
-{
-    //return &(mat->col(x));
-}
+// cv::Mat* col(cv::Mat *mat, int x)
+// {
+//     //return &(mat->col(x));
+// }
 
 // C++: Mat Mat::colRange(int startcol, int endcol);
-cv::Mat* colRange1(int startcol, int endcol)
-{
-}
+// cv::Mat* colRange1(int startcol, int endcol)
+// {
+// }
 /*
 // C++: Mat Mat::colRange(Range r);
 cv::Mat* colRange2(cv::Range r)
@@ -228,14 +228,14 @@ bool isContinuous(cv::Mat *mat)
 }
 
 // C++: bool Mat::isSubmatrix();
-bool isSubmatrix()
-{
-}
+// bool isSubmatrix()
+// {
+// }
 
 // C++: void Mat::locateROI(Size wholeSize, Point ofs);
-void locateROI(cv::Size wholeSize, cv::Point ofs)
-{
-}
+// void locateROI(cv::Size wholeSize, cv::Point ofs)
+// {
+// }
 
 /*
 // C++: Mat Mat::mul(Mat m, double scale = 1);
@@ -258,29 +258,29 @@ cv::Mat*  ones(Size size, int type)
 */
 
 // C++: void Mat::push_back(Mat m);
-void push_back(cv::Mat m)
-{
-}
+// void push_back(cv::Mat m)
+// {
+// }
 
 // C++: void Mat::release();
-void release()
-{
-}
+// void release()
+// {
+// }
 
 // C++: Mat Mat::reshape(int cn, int rows = 0);
-cv::Mat* reshape1(int cn, int rows)
-{
-}
+// cv::Mat* reshape1(int cn, int rows)
+// {
+// }
     
 // C++: Mat Mat::row(int y);
-cv::Mat* row(int y)
-{
-}
+// cv::Mat* row(int y)
+// {
+// }
 
 // C++: Mat Mat::rowRange(int startrow, int endrow);
-cv::Mat* rowRange1(int startrow, int endrow)
-{
-}
+// cv::Mat* rowRange1(int startrow, int endrow)
+// {
+// }
 
 /*
 // C++: Mat Mat::rowRange(Range r);
@@ -313,9 +313,9 @@ cv::Mat* setTo3(cv::Mat value, cv::Mat mask)
 */
 
 // C++: Size Mat::size();
-cv::Size size(cv::Mat *mat)
-{
-}
+// cv::Size size(cv::Mat *mat)
+// {
+// }
 
 // C++: size_t Mat::step1(int i = 0);
 long step1(cv::Mat *mat, int i)
@@ -324,9 +324,9 @@ long step1(cv::Mat *mat, int i)
 }
     
 // javadoc: Mat::step1();
-long step12(cv::Mat *mat)
-{
-}
+// long step12(cv::Mat *mat)
+// {
+// }
 
 // C++: Mat Mat::operator();(int rowStart, int rowEnd, int colStart, int
 // colEnd);

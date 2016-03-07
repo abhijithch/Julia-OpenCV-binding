@@ -1,7 +1,8 @@
+module LibOpenCV
+
 module cv2
 
-export cv2
-
+include("config.jl")
 include("./Mat.jl")
 include("./highgui.jl")
 include("./imgproc.jl")
@@ -35,27 +36,8 @@ const CV_64FC2 = 14
 const CV_64FC3 = 22
 const CV_64FC4 = 30
 
+end # cv2
 
+export cv2
 
-export
-# type Mat
-    Mat,
-    depth,
-    subMatrix,
-    channels,
-    dims,
-    cols,
-    rows,
-    empty,
-    clone,
-    adjustROI,
-    convertTo,
-    cross,
-    inv,
-
-# highgui
-    imread,
-    imshow,
-    waitKey
-
-end
+end # LibOpenCV

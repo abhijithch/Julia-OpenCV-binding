@@ -1,6 +1,6 @@
-include("../src/OpenCV.jl")
+using LibOpenCV
 
-img = cv2.imread("/home/sun/workspace/Lena.jpg")
+img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
 
 result = cv2.blur(img, (5, 5))
 

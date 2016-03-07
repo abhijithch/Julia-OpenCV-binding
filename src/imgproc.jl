@@ -1,6 +1,6 @@
 import Base.convert
 function split(image::Mat)
-    hnd = ccall( (:split, "../libcv2.so"), Ptr{Ptr{Void}}, (Ptr{Void},), image.handle)
+    hnd = ccall( (:split, cv2_lib), Ptr{Ptr{Void}}, (Ptr{Void},), image.handle)
     images = pointer_to_array(hnd, 3)
     imageR = convert(Array{Mat, 1}, images)
     return imageR
@@ -61,7 +61,7 @@ function calcHist(images::Array{Mat,},
     mask = Mat()
 
     imagesPtr = convertMatArray(images)
-    hnd = ccall( (:calcHist, "../libcv2.so"),
+    hnd = ccall( (:calcHist, cv2_lib),
               Ptr{Int32},
               (Ptr{Ptr{Void}}, Int, Ptr{Int}, Ptr{Void}, Int, Ptr{Int}, Ptr{Float64}, Bool, Bool),
               imagesPtr, nimages, channels, mask.handle, dims(images[1]), histSize, ranges, uniform, accumulate)
@@ -80,7 +80,7 @@ type cvPoint
 end
 
 function cvPoint(x::Int, y::Int)
-    pt = cvPoint(ccall( (:setPoint, "../libcv2.so"), Ptr{Void}, (Int, Int), x, y))
+    pt = cvPoint(ccall( (:setPoint, cv2_lib), Ptr{Void}, (Int, Int), x, y))
     return pt
 end
 
@@ -93,7 +93,7 @@ function blur(image::Mat,
     sizePtr = [sizeX, sizeY]
 
     anchorPtr = cvPoint(anchor.x, anchor.y)
-    result = Mat(ccall( (:blur, "../libcv2.so"), Ptr{Void}, (Ptr{Void}, Ptr{Int32},
+    result = Mat(ccall( (:blur, cv2_lib), Ptr{Void}, (Ptr{Void}, Ptr{Int32},
     Ptr{Void}, Int), image.handle, sizePtr, anchorPtr.handle, borderType))
 
     return result
@@ -113,7 +113,7 @@ function line(image::Mat,
 
     println(colorPtr)
     #println(cvPt1)
-    ccall((:line, "../libcv2.so"), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int), image.handle, cvPt1.handle, cvPt2.handle, colorPtr, thickness, lineType, shift)
+    ccall((:line, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int), image.handle, cvPt1.handle, cvPt2.handle, colorPtr, thickness, lineType, shift)
 end
 
 function rectangle(image::Mat,
@@ -126,7 +126,7 @@ function rectangle(image::Mat,
     colorPtr = convertColortoPtr(color)
     cvPt1 = cvPoint(p1.x, p1.y)
     cvPt2 = cvPoint(p2.x, p2.y)
-    ccall((:rectangle, "../libcv2.so"), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int), image.handle, cvPt1.handle, cvPt2.handle, colorPtr, thickness, lineType, shift)
+    ccall((:rectangle, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int), image.handle, cvPt1.handle, cvPt2.handle, colorPtr, thickness, lineType, shift)
 end
 
 function circle(image::Mat,
@@ -138,7 +138,7 @@ function circle(image::Mat,
                 shift::Int64 = 0)
     colorPtr = convertColortoPtr(color)
     cvCentre = cvPoint(centre.x, centre.y)
-    ccall((:circle, "../libcv2.so"), Void, (Ptr{Void}, Ptr{Void}, Int, Ptr{Void}, Int, Int, Int), image.handle, cvCentre.handle, radius, colorPtr, thickness, lineType, shift)
+    ccall((:circle, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Int, Ptr{Void}, Int, Int, Int), image.handle, cvCentre.handle, radius, colorPtr, thickness, lineType, shift)
 end
 
 function ellipse(image::Mat,
@@ -157,7 +157,7 @@ function ellipse(image::Mat,
     sizeX = convert(Int32, size[1])
     sizeY = convert(Int32, size[2])
     sizePtr = [sizeX, sizeY]
-    ccall((:ellipse, "../libcv2.so"), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int, Ptr{Void}, Int, Int, Int), image.handle, cvCentre.handle, sizePtr, angle, startAngle, endAngle, colorPtr, thickness, lineType, shift)
+    ccall((:ellipse, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int, Ptr{Void}, Int, Int, Int), image.handle, cvCentre.handle, sizePtr, angle, startAngle, endAngle, colorPtr, thickness, lineType, shift)
 
 end
 
@@ -173,7 +173,7 @@ function polylines(image::Mat,
     numOfPt = length(points) 
     colorPtr = convertColortoPtr(color)
 
-    ccall( (:polylines, "../libcv2.so"), Void, (Ptr{Void}, Ptr{Ptr{Void}}, Int, Bool, Ptr{Int32}, Int, Int, Int), image.handle, cvPts, numOfPt, isClosed, colorPtr, thickness, lineType, shift)
+    ccall( (:polylines, cv2_lib), Void, (Ptr{Void}, Ptr{Ptr{Void}}, Int, Bool, Ptr{Int32}, Int, Int, Int), image.handle, cvPts, numOfPt, isClosed, colorPtr, thickness, lineType, shift)
 end
 
 function convertColortoPtr(color::Tuple{Int, Int, Int})

@@ -1,12 +1,5 @@
-function imread(filename::String)
-	hnd =  Mat(ccall( (:imread, "../libcv2.so"), Ptr{Void},(Ptr{Uint8},), bytestring(filename)))
-	return hnd
-end
+imread(filename::AbstractString) = Mat(ccall( (:imread, cv2_lib), Ptr{Void},(Ptr{UInt8},), bytestring(filename)))
 
-function imshow(winName::String, mat::Mat)
-	ccall( (:imshow, "../libcv2.so"), Void, (Ptr{Uint8}, Ptr{Void}), bytestring(winName), mat.handle)
-end
+imshow(winName::AbstractString, mat::Mat) = ccall( (:imshow, cv2_lib), Void, (Ptr{UInt8}, Ptr{Void}), bytestring(winName), mat.handle)
 
-function waitKey(delay::Int)
-	ccall( (:waitKey, "../libcv2.so"), Void, (Int32,), delay)
-end
+waitKey(delay::Int) = ccall( (:waitKey, cv2_lib), Void, (Int32,), delay)
