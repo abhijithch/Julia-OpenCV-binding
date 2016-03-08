@@ -9,8 +9,13 @@ type cvRange
     rangeEnd::Int
 end
 
-Mat(rows::Int32, cols::Int32, matType::Int32) = Mat(createMat(rows::Int32, cols::Int32, matType::Int32))
-Mat() = Mat(createMat())
+function Mat(m::Mat)
+    finalizer(m, x -> ccall((:freeMat, cv2_lib), Void, (Ptr{Void}, ), x.handle))
+    return m
+end
+
+Mat(rows::Int32, cols::Int32, matType::Int32) = Mat(Mat(createMat(rows::Int32, cols::Int32, matType::Int32)))
+Mat() = Mat(Mat(createMat()))
 # C++: void Mat::create(int rows, int cols, int type);
 function create(rows::Int32, cols::Int32, matType::Int32)
     hnd = Mat(createMat(rows::Int32, cols::Int32, matType::Int32))
@@ -178,7 +183,3 @@ OutputArray() = OutputArray(OutputArray(ccall((:createOutputArray, cv2_lib),
 
 OutputArray(mat) = OutputArray(OutputArray(ccall((:createOutputArrayWithMat, cv2_lib),
                                                  Ptr{Void}, (Ptr{Void}, ), mat.handle)))
-
-cvtColor(inarr::InputArray, outarr::OutputArray, code, dstCn = 0) =
-    ccall((:_cvtColor, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Cint, ),
-          inarr.handle, outarr.handle, code, dstCn)
