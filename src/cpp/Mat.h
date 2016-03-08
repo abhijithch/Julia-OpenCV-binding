@@ -31,6 +31,8 @@ extern "C" cv::Mat* createMat7(cv::Mat m, cv::Range rowRange);
 // C++: Mat::Mat(Mat m, Rect roi);
 extern "C" cv::Mat* createMat8(cv::Mat m, cv::Rect roi);
 
+extern "C" void freeMat(cv::Mat *);
+
 // C++: Mat Mat::adjustROI(int dtop, int dbottom, int dleft, int dright);
 // Impelemented, not test yet.
 extern "C" cv::Mat* adjustROI(cv::Mat *mat, int dtop, int dbottom, int dleft, int dright);

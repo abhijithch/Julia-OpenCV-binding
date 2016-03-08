@@ -223,3 +223,7 @@ function convertPointArray(points::Array{cv2.Point, 1})
     end
     return cvPts
 end
+
+cvtColor(inarr::InputArray, outarr::OutputArray, code, dstCn = 0) =
+    ccall((:cvtColor, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Cint, ),
+          inarr.handle, outarr.handle, code, dstCn)

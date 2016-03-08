@@ -1,3 +1,4 @@
 # Call Pkg.build("LibOpenCV") to run this script
 
-run(`make -f Makefile JULIA_HOME=$JULIA_HOME`)
+@unix_only run(`make -f Makefile JULIA_HOME=$JULIA_HOME`)
+# @windows_only ...

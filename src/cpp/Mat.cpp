@@ -21,6 +21,11 @@ cv::Mat* createMat2(int rows, int cols, int type)
     return mat;
 }
 
+void freeMat(cv::Mat *m)
+{
+    delete m;
+}
+
 /*
 // C++: Mat::Mat(Size size, int type);
 cv::Mat* createMat3(cv::Size size, int type)
