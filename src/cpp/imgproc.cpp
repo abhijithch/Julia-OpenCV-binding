@@ -40,7 +40,6 @@ cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderType)
 
 void rectangle(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color, int thickness, int lineType, int shift)
 {
-    using namespace cv;
     cv::rectangle(*img, *p1, *p2,  cv::Scalar(color[0], color[1], color[2]));
 }
 
@@ -69,10 +68,10 @@ void putText(cv::Mat *img, const char *text, cv::Point *org, int fontFace, doubl
     cv::putText(*img, cv::String(text), *org, fontFace, fontScale, cv::Scalar(color[0], color[1], color[2]), thickness, lineType, bLO);
 }
 
-void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)
+/*void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)
 {
     using namespace cv;
-    vector<Point> contour;
+    std::vector<Point> contour;
     for (int i = 0; i < npts; i++)
         contour.push_back(*pts[i]);
 
@@ -81,7 +80,7 @@ void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *colo
     const cv::Point *ptsx = (const cv::Point*) Mat(contour).data;
 
     cv::polylines(*img, &ptsx, &npts, 1, isClosed, Scalar(color[0],  color[1], color[2]), thickness, lineType, shift);
-}
+    }*/
 
 int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat *mask, int dims, const int* histSize, const double* ranges, bool uniform, bool accumulate)
 {
@@ -95,10 +94,8 @@ int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat 
 
     const float* const_histRanges = histRanges;
 
-    using namespace cv;
-  
      // Compute the histograms:
-    calcHist( *images, nimages, channels, *mask, *hist, 1, histSize, &const_histRanges, uniform, accumulate);  
+    cv::calcHist( *images, nimages, channels, *mask, *hist, 1, histSize, &const_histRanges, uniform, accumulate);  
 
     // Copy the histogram to an int array
     // TODO: use int as arrary's type is just for test, it will correct later
@@ -114,4 +111,15 @@ int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat 
 void cvtColor(cv::_InputArray *src, cv::_OutputArray *dst, int code, int dstCn)
 {
     cv::cvtColor(*src, *dst, code, dstCn);
+}
+
+void Sobel(cv::_InputArray *src, cv::_OutputArray *dst, int ddepth, int dx, int dy, int ksize, double scale, double delta, int borderType)
+{
+    cv::Sobel(*src, *dst, ddepth, dx, dy, ksize, scale, delta, borderType);
+}
+
+// C++: filter2D(InputArray src, OutputArray dst, int ddepth, InputArray kernel, Point anchor=Point(-1,-1), double delta=0, intborderType=BORDER_DEFAULT)
+void filter2D(cv::_InputArray *src, cv::_OutputArray *dst, int ddepth, cv::_InputArray *kernel, cv::Point *anchor, double delta, int borderType)
+{
+  cv::filter2D(*src, *dst, ddepth, *kernel, *anchor, delta, borderType);
 }

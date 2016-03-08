@@ -3,13 +3,28 @@
 
 using namespace std;
 
-cv::Mat* correct(cv::Mat *measurement)
+cv::KalmanFilter* createKalmanFilterWithArgs(int dynamParams, int measureParams, int controlParam, int type)
 {
-    cv::KalmanFilter::correct(*measurement)
+  return new cv::KalmanFilter(dynamParams, measureParams, controlParam, type);
 }
 
-cv::Mat* predict()
+cv::KalmanFilter* createKalmanFilter()
 {
-    cv::Mat *control = new cv::Mat();
-    cv::KalmanFilter::predict(*control)
+  return new cv::KalmanFilter();
+}
+
+
+void freeKalmanFilter(cv::KalmanFilter *kf)
+{
+  delete kf;
+}
+
+cv::Mat* correct(cv::KalmanFilter *kf, const cv::Mat *measurement)
+{
+  return new cv::Mat(kf->correct(*measurement));
+}
+
+cv::Mat* predict(cv::KalmanFilter *kf, const cv::Mat *control)
+{
+  return new cv::Mat(kf->predict(*control));
 }

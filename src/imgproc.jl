@@ -227,3 +227,13 @@ end
 cvtColor(inarr::InputArray, outarr::OutputArray, code, dstCn = 0) =
     ccall((:cvtColor, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Cint, ),
           inarr.handle, outarr.handle, code, dstCn)
+
+
+Sobel(src::InputArray, dst::OutputArray, ddepth::Int, dx::Int, dy::Int, ksize::Int, scale::Float64, delta::Float64, borderType::Int) =
+    ccall((:Sobel, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Cint, Cint, Cint, Float64, Float64, Cint,), src.handle, dst.handle, ddepth, dx, dy, ksize, scale, delta, borderType)
+
+function filter2D(src::InputArray, dst::OutputArray, ddepth::Int, kernel::InputArray, anchor::cv2.Point=cv2.Point(-1, -1), delta::Float64=0.0, borderType::Int=1)
+    anchorPtr = cvPoint(anchor.x, anchor.y)
+    ccall((:filter2D, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Ptr{Void}, Ptr{Void}, Float64, Cint,), src.handle, dst.handle, ddepth, kernel.handle, anchorPtr.handle, delta, borderType)
+
+end
