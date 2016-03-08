@@ -1,4 +1,4 @@
-imread(filename::AbstractString) = Mat(ccall( (:imread, cv2_lib), Ptr{Void},(Ptr{UInt8},), bytestring(filename)))
+imread(filename::AbstractString) = _Mat(ccall( (:imread, cv2_lib), Ptr{Void},(Ptr{UInt8},), bytestring(filename)))
 
 imshow(winName::AbstractString, mat::Mat) = ccall( (:imshow, cv2_lib), Void, (Ptr{UInt8}, Ptr{Void}), bytestring(winName), mat.handle)
 

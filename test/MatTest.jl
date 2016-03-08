@@ -1,4 +1,4 @@
-include("../src/OpenCV.jl")
+using LibOpenCV
 
 img = cv2.imread("/home/sunny/workspace/image.jpg")
 #emptyImage = cv2.Mat(255,255,3)

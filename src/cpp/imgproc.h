@@ -6,6 +6,7 @@
 #include "opencv2/highgui/highgui.hpp"
 
 extern "C" cv::Point* setPoint(int x, int y);
+extern "C" void freePoint(cv::Point *);
 
 // C++: void blur( const Mat& src, Mat& dst, Size ksize, Point anchor=Point(-1,-1), int borderType=BORDER DEFAULT );
 extern "C" cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderType);

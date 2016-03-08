@@ -79,10 +79,13 @@ type cvPoint
     handle::Ptr{Void}
 end
 
-function cvPoint(x::Int, y::Int)
-    pt = cvPoint(ccall( (:setPoint, cv2_lib), Ptr{Void}, (Int, Int), x, y))
+function _cvPoint(ptr::Ptr{Void})
+    pt = cvPoint(ptr)
+    finalizer(pt, x -> ccall((:freePoint, cv2_lib), Void, (Ptr{Void}, ), x.handle))
     return pt
 end
+
+cvPoint(x::Int, y::Int) = _cvPoint(ccall( (:setPoint, cv2_lib), Ptr{Void}, (Int, Int), x, y))
 
 function blur(image::Mat,
               size::Tuple{Int, Int},

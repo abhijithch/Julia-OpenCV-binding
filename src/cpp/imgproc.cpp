@@ -12,23 +12,26 @@ cv::Point* setPoint(int x, int y)
     cv::Point *pt = new cv::Point(x, y);
     return pt;
 }
-/*
+
+void freePoint(cv::Point *ptr)
+{
+    delete ptr;
+}
+
 cv::Mat** split(const cv::Mat *src)
 {
-  
     cv::Mat** imageArray = new cv::Mat*[src->channels()];
-    //cv::Mat imageArrayTemp[src->channels()];
-    cv::Mat** imageArrayTemp = new cv::Mat*[src->channels()];
+    cv::Mat imageArrayTemp[src->channels()];
     cv::split(*src, imageArrayTemp);
-  
+
     for (int i = 0; i < src->channels(); i++)
-      {
+    {
         imageArray[i] = new cv::Mat;
         imageArrayTemp[i].copyTo(*(imageArray[i]));
-      }
-  
+    }
+
     return imageArray;
-    }*/
+}
 
 cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderType)
 {
@@ -68,10 +71,10 @@ void putText(cv::Mat *img, const char *text, cv::Point *org, int fontFace, doubl
     cv::putText(*img, cv::String(text), *org, fontFace, fontScale, cv::Scalar(color[0], color[1], color[2]), thickness, lineType, bLO);
 }
 
-/*void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)
+void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)
 {
     using namespace cv;
-    std::vector<Point> contour;
+    vector<Point> contour;
     for (int i = 0; i < npts; i++)
         contour.push_back(*pts[i]);
 
@@ -80,7 +83,7 @@ void putText(cv::Mat *img, const char *text, cv::Point *org, int fontFace, doubl
     const cv::Point *ptsx = (const cv::Point*) Mat(contour).data;
 
     cv::polylines(*img, &ptsx, &npts, 1, isClosed, Scalar(color[0],  color[1], color[2]), thickness, lineType, shift);
-    }*/
+}
 
 int* calcHist(const cv::Mat** images, int nimages, const int* channels, cv::Mat *mask, int dims, const int* histSize, const double* ranges, bool uniform, bool accumulate)
 {

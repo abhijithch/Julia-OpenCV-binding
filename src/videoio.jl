@@ -4,21 +4,22 @@ type VideoCapture
     handle::Ptr{Void}
 end
 
-function VideoCapture(v::VideoCapture)
+function _VideoCapture(ptr::Ptr{Void})
+    v = VideoCapture(ptr)
     finalizer(v, x -> ccall((:freeVideoCapture, cv2_lib),
                             Void, (Ptr{Void}, ), x.handle))
     return v
 end
 
-VideoCapture() = VideoCapture(VideoCapture(ccall((:createVideoCapture, cv2_lib),
-                                                 Ptr{Void}, ())))
+VideoCapture() = _VideoCapture(ccall((:createVideoCapture, cv2_lib),
+                                     Ptr{Void}, ()))
 
-VideoCapture(dev::Int) = VideoCapture(VideoCapture(ccall((:createVideoCaptureWithDevice, cv2_lib),
-                                                    Ptr{Void}, (Cint, ), dev)))
+VideoCapture(dev::Int) = _VideoCapture(ccall((:createVideoCaptureWithDevice, cv2_lib),
+                                             Ptr{Void}, (Cint, ), dev))
 
 VideoCapture(file::AbstractString) =
-    VideoCapture(VideoCapture(ccall((:createVideoCaptureWithFile, cv2_lib),
-                                    Ptr{Void}, (Ptr{Cchar}, ), pointer(file))))
+    _VideoCapture(ccall((:createVideoCaptureWithFile, cv2_lib),
+                        Ptr{Void}, (Ptr{Cchar}, ), pointer(file)))
 
 macro getbool(v)
     quote
