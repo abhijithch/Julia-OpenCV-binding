@@ -4,6 +4,8 @@
 
 using namespace std;
 
+#include <opencv2/core/core.hpp>
+
 cv::Mat* imread(char *filename)
 {
     cv::Mat img = cv::imread(filename);
@@ -15,9 +17,9 @@ cv::Mat* imread(char *filename)
 void imshow(char *winName, Mat* mat)
 {
     if (!mat->empty()) {
-	cv::imshow(winName, *mat);
+		cv::imshow(winName, *mat);
     } else {
-	cout << "Empty image" << endl;
+		cout << "Empty image" << endl;
     }
 }
 
@@ -25,5 +27,3 @@ void waitKey(int delay)
 {
     cv::waitKey(delay);
 }
-
-

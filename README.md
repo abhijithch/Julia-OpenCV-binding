@@ -1,37 +1,43 @@
- Julia-OpenCV binding prototype
-=====================
+ LibOpenCV.jl
+====================
 
-**NOTE:**
-This project currently is a **minimal prototype** of Julia-OpenCV binding. It is under development.
-It is **not** ready for common use and **only work** for Linux now.
+Julia bindings for [OpenCV](http://opencv.org/).
 
-Introduction
-------------
+## Installation
 
-This OpenCV-Julia binding is try to port OpenCV API to Julia. It use the "**OpenCV way**". The "OpenCV way" means the wrapping will only use the language itself, without 3rd party tools. Like official OpenCV-Python and OpenCV-Julia did.
+### Unix (Ubuntu and Mac OSX)
 
-This binding take OpenCV-Python and OpenCV-Java as reference. It will more like OpenCV-Java. For example, map datatype manually, use Python generation tool to wrap functions.
+Install [OpenCV](http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html), then:
 
-Goal
-----
+```julia
+Pkg.clone("https://github.com/abhijithch/LibOpenCV.jl")
+Pkg.build("LibOpenCV")
+```
 
-The goal of this project is provide an easy to use and Julia style API. Let user could use OpenCV functions in Julia **without recompile OpenCV with specific compiler**. That's means you can use OpenCV in Julia with offcial binary package, as well as custom build OpenCV.
+### Windows
 
-**Update Jan 17th, 2015**
-Restart the project
+Install [Cygwin](http://www.cygwin.com/).  Required programs are `make` and `x86_64-w64-mingw32-g++`.
+Install [OpenCV](http://docs.opencv.org/2.4/doc/tutorials/introduction/windows_install/windows_install.html), then:
 
-~~How to use it~~
----------
-~~Run Makefile, compile cv2.h and cv2.cpp to a shared library. Change the image path in test/read.jl. Run "julia read.jl".~~
+Add Cygwin bin directory to `PATH environment variable, the paths look something like this:
 
-**Note**: Rewriting the build system with CMake. Make the binding could merge to OpenCV CMake build system possible.
+```
+C:\cygwin64\bin\
+```
+
+Then, on julia prompt:
+
+```julia
+Pkg.clone("https://github.com/abhijithch/LibOpenCV.jl")
+Pkg.build("LibOpenCV")
+```
 
 Minimal Example -- Calculate histogram
 -------------------
 
 The code of calculating histogram that use OpenCV Julia binding is like this:
 
-```
+```julia
 include("../src/OpenCV.jl")
 
 img = cv2.imread("/home/sun/workspace/Lena.jpg")
@@ -69,21 +75,6 @@ cv2.imshow("HistImage", histImage)
 cv2.waitKey(0)
 ```
 
-I am sure you can understand the code by reading comments and codes. Here is the
-output that generated in Julia by the binding:
+Here is the output that generated in Julia by the binding:
 
 ![Hist](./doc/figures/hist_Julia.png)
-
-More information, please see `/doc/test_descritopns`(Actually, not much for now)
-
-TODO
-------
-
-- Windows support(In progress)
-- CMake support
-- Basic datatype mapping
-- Generation tool
-
-Contact
---------
-Any comments or suggestion are highly appreciated! Please send these to [Julia-dev mailist](https://groups.google.com/forum/#!forum/julia-dev), I will see that. 

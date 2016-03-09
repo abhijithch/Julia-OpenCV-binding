@@ -1,7 +1,7 @@
 #include "videoio.h"
-#include <iostream>
+//#include <iostream>
 
-using namespace std;
+//using namespace std;
 
 VideoCapture *createVideoCapture()
 {
@@ -15,7 +15,7 @@ VideoCapture *createVideoCaptureWithDevice(int device)
 
 VideoCapture *createVideoCaptureWithFile(char *file)
 {
-    return new VideoCapture(string(file));
+    return new VideoCapture(file);
 }
 
 void freeVideoCapture(VideoCapture *v)
@@ -27,7 +27,7 @@ void freeVideoCapture(VideoCapture *v)
 
 int videoCaptureOpenWithFile(VideoCapture *v, char *file)
 {
-    return GET_C_BOOL(v->open(string(file)));
+    return GET_C_BOOL(v->open(file));
 }
 
 int videoCaptureOpenWithDevice(VideoCapture *v, int device)
