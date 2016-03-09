@@ -7,22 +7,18 @@ using namespace std;
 cv::Mat* imread(char *filename)
 {
     cv::Mat img = cv::imread(filename);
-    cv::Mat *image = new Mat();
+    cv::Mat *image = new cv::Mat();
     img.copyTo(*image);
-
-	return image;
+    return image;
 }
 
 void imshow(char *winName, Mat* mat)
 {
-	if (!mat->empty())
-	{
-		cv::imshow(winName, *mat);
-	}
-	else
-	{
-		cout << "Empty image" << endl;
-	}
+    if (!mat->empty()) {
+	cv::imshow(winName, *mat);
+    } else {
+	cout << "Empty image" << endl;
+    }
 }
 
 void waitKey(int delay)

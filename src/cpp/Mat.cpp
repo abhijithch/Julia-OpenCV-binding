@@ -9,16 +9,14 @@ using namespace std;
 // Done
 cv::Mat* createMat1()
 {
-    cv::Mat *mat = new cv::Mat();
-    return mat;
+    return new cv::Mat();
 }
 
 // C++: Mat::Mat(int rows, int cols, int type);
 // Done
 cv::Mat* createMat2(int rows, int cols, int type)
 {
-    cv::Mat *mat = new cv::Mat(rows, cols, type);
-    return mat;
+    return new cv::Mat(rows, cols, type);
 }
 
 void freeMat(cv::Mat *m)
@@ -63,8 +61,7 @@ cv::Mat* createMat8(cv::Mat m, Rect roi)
 // C++: Mat Mat::adjustROI(int dtop, int dbottom, int dleft, int dright);
 cv::Mat* adjustROI(cv::Mat *mat, int dtop, int dbottom, int dleft, int dright)
 {
-    cv::Mat *ROIimage = new cv::Mat(mat->adjustROI(dtop, dbottom, dleft, dright));
-    return ROIimage;
+    return new cv::Mat(mat->adjustROI(dtop, dbottom, dleft, dright));
 }
 
 // C++: void Mat::assignTo(Mat m, int type = -1);
@@ -89,8 +86,7 @@ int at(cv::Mat *mat, int channel, int i, int j)
 // C++: Mat Mat::clone();
 cv::Mat* cloneInWrap(cv::Mat *mat)
 {
-    cv::Mat *cloneMat = new cv::Mat(mat->clone());
-    return cloneMat;
+    return new cv::Mat(mat->clone());
 }
 
 // C++: Mat Mat::col(int x);

@@ -3,7 +3,8 @@
 
 using namespace std;
 
-cv::KalmanFilter* createKalmanFilterWithArgs(int dynamParams, int measureParams, int controlParam, int type)
+cv::KalmanFilter* createKalmanFilterWithArgs(int dynamParams, int measureParams,
+					     int controlParam, int type)
 {
   return new cv::KalmanFilter(dynamParams, measureParams, controlParam, type);
 }

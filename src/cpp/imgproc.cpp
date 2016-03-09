@@ -9,8 +9,7 @@ using namespace std;
 
 cv::Point* setPoint(int x, int y)
 {
-    cv::Point *pt = new cv::Point(x, y);
-    return pt;
+    return new cv::Point(x, y);
 }
 
 void freePoint(cv::Point *ptr)
