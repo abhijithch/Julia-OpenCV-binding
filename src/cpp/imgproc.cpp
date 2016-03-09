@@ -21,7 +21,7 @@ void freePoint(cv::Point *ptr)
 cv::Mat** split(const cv::Mat *src)
 {
     cv::Mat** imageArray = new cv::Mat*[src->channels()];
-    cv::Mat imageArrayTemp[src->channels()];
+    cv::Mat* imageArrayTemp = new cv::Mat[src->channels()];
     cv::split(*src, imageArrayTemp);
 
     for (int i = 0; i < src->channels(); i++)
@@ -29,7 +29,7 @@ cv::Mat** split(const cv::Mat *src)
         imageArray[i] = new cv::Mat;
         imageArrayTemp[i].copyTo(*(imageArray[i]));
     }
-
+    delete [] imageArrayTemp;
     return imageArray;
 }
 
