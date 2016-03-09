@@ -16,21 +16,15 @@ Pkg.build("LibOpenCV")
 
 ### Windows
 
-Install [Cygwin](http://www.cygwin.com/).  Required programs are `make` and `x86_64-w64-mingw32-g++`.
-Install [OpenCV](http://docs.opencv.org/2.4/doc/tutorials/introduction/windows_install/windows_install.html), then:
+Download or [build](https://sourceforge.net/p/opencvmingw/wiki/Build%20OpenCV%20under%20MinGW/) the MinGW 64-bit binaries of OpenCV and add the `bin` directory to `PATH` environment variable.
 
-Add Cygwin bin directory to `PATH environment variable, the paths look something like this:
-
-```
-C:\cygwin64\bin\
-```
-
-Then, on julia prompt:
+Clone the package from julia prompt.
 
 ```julia
 Pkg.clone("https://github.com/abhijithch/LibOpenCV.jl")
-Pkg.build("LibOpenCV")
 ```
+
+Add `deps/windows` directory to the `PATH` environment variable.
 
 Minimal Example -- Calculate histogram
 -------------------
