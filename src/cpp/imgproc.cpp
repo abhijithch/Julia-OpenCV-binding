@@ -123,5 +123,40 @@ void Sobel(cv::_InputArray *src, cv::_OutputArray *dst, int ddepth, int dx, int 
 // C++: filter2D(InputArray src, OutputArray dst, int ddepth, InputArray kernel, Point anchor=Point(-1,-1), double delta=0, intborderType=BORDER_DEFAULT)
 void filter2D(cv::_InputArray *src, cv::_OutputArray *dst, int ddepth, cv::_InputArray *kernel, cv::Point *anchor, double delta, int borderType)
 {
-  cv::filter2D(*src, *dst, ddepth, *kernel, *anchor, delta, borderType);
+    cv::filter2D(*src, *dst, ddepth, *kernel, *anchor, delta, borderType);
+}
+
+void resize(cv::_InputArray *src, cv::_OutputArray *dst, int *dsize, double fx, double fy, int interpolation)
+{
+    cv::resize(*src, *dst, cv::Size(dsize[0],dsize[1]), fx, fy, interpolation);
+}
+
+double threshold(cv::_InputArray *src, cv::_OutputArray *dst, double thresh, double maxval, int type)
+{
+    return cv::threshold(*src, *dst, thresh, maxval, type);
+}
+
+void HoughLines(cv::_InputArray *image, cv::_OutputArray *lines, double rho, double theta, int threshold, double srn, double stn)
+{
+    cv::HoughLines(*image, *lines, rho, theta, threshold, srn, stn);
+}
+
+void equalizeHist(cv::_InputArray *src, cv::_OutputArray *dst)
+{
+    cv::equalizeHist(*src, *dst);
+}
+
+cv::HOGDescriptor* createHOGDescriptor()
+{
+    return new cv::HOGDescriptor();
+}
+
+void freeHOGDescriptor(cv::HOGDescriptor *hgd)
+{
+    delete hgd;
+}
+
+void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector)
+{
+    hg->setSVMDetector(*_svmdetector);
 }
