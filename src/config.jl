@@ -1,9 +1,9 @@
 function loadlib()
     global cv2_lib
     if !isdefined(:cv2_lib)
-        const libdir = joinpath(Pkg.dir("LibOpenCV"), "deps", "usr", "lib")
-        @unix_only lib = joinpath(libdir, "libcv2.so")
-        @windows_only lib = joinpath(libdir, "libcv2.so")
+        const libdir = joinpath(Pkg.dir("LibOpenCV"), "deps")
+        @unix_only lib = joinpath(libdir, "usr", "lib", "libcv2.so")
+        @windows_only lib = joinpath(libdir, "windows", libcv2.dll")
         try
             Libdl.dlopen(lib)
         catch

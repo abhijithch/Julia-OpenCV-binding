@@ -1,18 +1,20 @@
-CXX = x86_64-w64-mingw32-g++
-CFLAGS = -Wall -Werror -fpic
+# MinGW 64 build
+# First build opencv with mingw64-g++ 
+# Add this to environment variable PATH: C:/opencv/build64/install/x64/mingw/bin
+# Also add deps/windows to PATH
+
+CXX=C:/Program\ Files/mingw-w64/x86_64-5.3.0-posix-seh-rt_v4-rev0/mingw64/bin/x86_64-w64-mingw32-g++
+
+CFLAGS = -Wall -fpic
 BUILD_DIR = build
-LIB_DIR = usr/lib/libcv2.dll
+LIB_DIR = windows/libcv2.dll
 
-LIBS = -L C:/Users/Administrator/Downloads/opencv-3.1.0/lib
-#LIBS = -L C:/Users/Administrator/Downloads/opencv/build/x64/vc14/bin
+LIBS = -L C:/opencv/build64/install/x64/mingw/lib
 
-#LDFLAGS = -lcygopencv_highgui -lcygopencv_core -lcygopencv_imgproc -lcygopencv_video -lcygopencv_videoio
-LDFLAGS = -lopencv_highgui -lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_video -lopencv_videoio
-#LDFLAGS = -l opencv_world310.lib
+LDFLAGS = -lopencv_highgui310 -lopencv_core310 -lopencv_calib3d310 -lopencv_features2d310 -lopencv_flann310 -lopencv_imgcodecs310 -lopencv_imgproc310 -lopencv_ml310 -lopencv_objdetect310 -lopencv_photo310 -lopencv_shape310 -lopencv_stitching310 -lopencv_superres310 -lopencv_video310 -lopencv_videoio310
 
 SOURCE_DIR = ../src/cpp
-INCLUDE = -I C:/Users/Administrator/Downloads/opencv-3.1.0/include
-#INCLUDE = -I C:/Users/Administrator/Downloads/opencv/build/include
+INCLUDE=-I C:/opencv/build64/install/include
 OBJECTS = $(BUILD_DIR)/Mat.o $(BUILD_DIR)/imgproc.o $(BUILD_DIR)/cv2.o $(BUILD_DIR)/videoio.o $(BUILD_DIR)/tracking.o
 
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
@@ -25,4 +27,4 @@ all: $(LIB_DIR)
 
 clean:
 	rm -rf build/*.o
-	rm -rf usr/lib/*.lib
+	rm -rf usr/lib/*.*
