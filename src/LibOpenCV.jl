@@ -11,6 +11,7 @@ include("highgui.jl")
 include("imgproc.jl")
 include("videoio.jl")
 include("tracking.jl")
+include("core.jl")
 
 end # cv2
 

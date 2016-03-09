@@ -240,3 +240,42 @@ function filter2D(src::InputArray, dst::OutputArray, ddepth::Int, kernel::InputA
     ccall((:filter2D, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cint, Ptr{Void}, Ptr{Void}, Float64, Cint,), src.handle, dst.handle, ddepth, kernel.handle, anchorPtr.handle, delta, borderType)
 
 end
+
+function resize(src::InputArray, dst::OutputArray, dsize::Tuple{Int, Int}, fx::Float64, fy::Float64, interpolation::Int)
+
+    sizeX = convert(Int32, dsize[1])
+    sizeY = convert(Int32, dsize[2])
+    sizePtr = [sizeX, sizeY]
+
+    ccall((:resize, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Int32}, Float64, Cint,), src.handle, dst.handle, sizePtr, fx, fy, interpolation)
+
+end
+
+function threshold(src::InputArray, dst::OutputArray, thresh::Float64, maxval::Float64, tp::Int)
+    return ccall((:threshold, cv2_lib), Float64, (Ptr{Void}, Ptr{Void}, Float64, Float64, Cint,), src.handle, dst.handle, thresh, maxval, tp)
+end
+
+function HoughLines(image::InputArray, lines::OutputArray, rho::Float64, theta::Float64,threshold::Int, srn::Float64, stn::Float64)
+    ccall((:HoughLines, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Float64, Float64, Cint, Float64, Float64,), image.handle, lines.handle, rho, theta, threshold, srn, stn)
+end
+
+function equalizeHist(src::InputArray, dst::OutputArray)
+    ccall((:equalizeHist, cv2_lib), Void, (Ptr{Void}, Ptr{Void},), src.handle, dst.handle)
+end
+
+type HOGDescriptor
+    handle::Ptr{Void}
+end
+
+function _HOGDescriptor(ptr::Ptr{Void})
+    hg = HOGDescriptor(ptr)
+    finalizer(hg, x -> ccall((:freeHOGDescriptor, cv2_lib),
+                             Void, (Ptr{Void}, ), x.handle))
+    return hg
+end
+
+HOGDescriptor() = _HOGDescriptor(ccall((:createHOGDescriptor, cv2_lib),Ptr{Void}, (())))
+
+# Member functions of HOGDescriptor
+setSVMDetector(hg::HOGDescriptor, _svmdetector::InputArray) =
+    ccall((:setSVMDetector, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, ), hg.handle, _svmDetector.handle)

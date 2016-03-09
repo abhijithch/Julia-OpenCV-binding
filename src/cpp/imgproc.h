@@ -4,6 +4,7 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
 
 extern "C" cv::Point* setPoint(int x, int y);
 extern "C" void freePoint(cv::Point *);
@@ -44,4 +45,23 @@ extern "C" void Sobel(cv::_InputArray *src, cv::_OutputArray *dst, int ddepth, i
 
 // C++: void filter2D(InputArray src, OutputArray dst, int ddepth, InputArray kernel, Point anchor=Point(-1,-1), double delta=0, intborderType=BORDER_DEFAULT)
 extern "C" void filter2D(cv::_InputArray *src, cv::_OutputArray *dst, int ddepth, cv::_InputArray *kernel, cv::Point *anchor, double delta, int borderType);
+
+// C++: void cv::resize(InputArray src, OutputArray dst, Size dsize, double fx = 0, double fy = 0, int interpolation = INTER_LINEAR)
+extern "C" void resize(cv::_InputArray *src, cv::_OutputArray *dst, int *dsize, double fx, double fy, int interpolation);
+
+// C++: double cv::threshold(InputArray src, OutputArray dst, double thresh, double maxval, int type)
+extern "C" double threshold(cv::_InputArray *src, cv::_OutputArray *dst, double thresh, double maxval, int type);
+
+// C++: void HoughLines(InputArray image, OutputArray lines, double rho, double theta, int threshold, double srn=0, double stn=0)
+extern "C" void HoughLines(cv::_InputArray *image, cv::_OutputArray *lines, double rho, double theta, int threshold, double srn, double stn);
+
+// C++: void equalizeHist(InputArray src, OutputArray dst)
+extern "C" void equalizeHist(cv::_InputArray *src, cv::_OutputArray *dst);
+
+extern "C" cv::HOGDescriptor* createHOGDescriptor();
+
+extern "C" void freeHOGDescriptor(cv::HOGDescriptor *);
+
+extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector);
+
 #endif
