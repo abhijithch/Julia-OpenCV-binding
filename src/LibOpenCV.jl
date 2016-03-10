@@ -12,6 +12,7 @@ include("imgproc.jl")
 include("videoio.jl")
 include("tracking.jl")
 include("core.jl")
+include("objdetect.jl")
 
 end # cv2
 

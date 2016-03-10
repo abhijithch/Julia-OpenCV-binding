@@ -147,79 +147,10 @@ void equalizeHist(cv::_InputArray *src, cv::_OutputArray *dst)
     cv::equalizeHist(*src, *dst);
 }
 
-cv::HOGDescriptor* createHOGDescriptor()
-{
-    return new cv::HOGDescriptor();
-}
-
-void freeHOGDescriptor(cv::HOGDescriptor *hgd)
-{
-    delete hgd;
-}
-
-void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector)
-{
-    hg->setSVMDetector(*_svmdetector);
-}
-
 void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double thresh1, double thresh2, int apertureSize, int L2gradient)
 {
     bool thing = (bool)(L2gradient);
     cv::Canny(*image, *edges, thresh1, thresh2, apertureSize, thing);
-}
-
-cv::CascadeClassifier* createCascadeClassifier()
-{
-    return new cv::CascadeClassifier();
-}
-
-cv::CascadeClassifier* createCascadeClassifierWithString(char *path)
-{
-    return new cv::CascadeClassifier(path);
-}
-
-void freeCascadeClassifier(cv::CascadeClassifier* cc)
-{
-    delete cc;
-}
-
-void loadCCFromFile(cv::CascadeClassifier* cc, char* path)
-{
-    cc->load(path);
-}
-    
-void detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img, cv::Rect ***recs, 
-                            int *nrecs, double **fWeights, int *n_fWeights, double hitThreshold, 
-                            cv::Size* wins, cv::Size* pads, double scale, double finalThreshold, 
-                            int useMeanshiftGrouping)
-{
-    std::vector<cv::Rect> foundLocations;
-    std::vector<double> foundWeights;
-
-    hog->detectMultiScale(*img, foundLocations, foundWeights, hitThreshold, *wins, 
-                            *pads, scale, finalThreshold, useMeanshiftGrouping);
-
-    *nrecs = foundLocations.size();
-    *n_fWeights = foundWeights.size();
-
-    *recs = new cv::Rect*[*nrecs];
-    *fWeights = new double[*n_fWeights];
-
-    for (int i = 0; i < *nrecs; i++)
-    {
-        cv::Rect t = foundLocations.at(i); 
-        *recs[i] = new cv::Rect(t);
-    }
-    for (int i = 0; i < *n_fWeights; i++)
-    {
-         *fWeights[i] = foundWeights.at(i);
-    }
-}
-
-void freeDetectMultiScaleHOG(cv::Rect ***recs, double **fWeights)
-{
-    delete [] *recs;
-    delete [] *fWeights;
 }
 
 void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, double sigmaX, double sigmaY, int borderType)
@@ -251,21 +182,3 @@ void freeSize(cv::Size* s)
 {
     delete s;
 }
-
-void getDefaultPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out)
-{
-    std::vector<float> outer;
-    outer = hog->getDefaultPeopleDetector();
-    *n_out = outer.size();
-    out = &outer[0];
-}
-
-void getDaimlerPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out)
-{
-    std::vector<float> outer;
-    outer = hog->getDaimlerPeopleDetector();
-    *n_out = outer.size();
-    out = &outer[0];
-}
-
-

@@ -4,7 +4,6 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
-#include "opencv2/objdetect/objdetect.hpp"
 
 extern "C" cv::Point* setPoint(int x, int y);
 extern "C" void freePoint(cv::Point *);
@@ -58,30 +57,13 @@ extern "C" void HoughLines(cv::_InputArray *image, cv::_OutputArray *lines, doub
 // C++: void equalizeHist(InputArray src, OutputArray dst)
 extern "C" void equalizeHist(cv::_InputArray *src, cv::_OutputArray *dst);
 
-extern "C" cv::HOGDescriptor* createHOGDescriptor();
-
-extern "C" void freeHOGDescriptor(cv::HOGDescriptor *);
-
-extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector);
-
 extern "C" void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double thresh1, double thresh2, int apertureSize, int L2gradient);
-
-extern "C" cv::CascadeClassifier* createCascadeClassifier();
-
-extern "C" cv::CascadeClassifier* createCascadeClassifierWithString(char* path);
-
-extern "C" void freeCascadeClassifer(cv::CascadeClassifier* cc);
-
-extern "C" void loadCCFromFile(cv::CascadeClassifier* cc, char* path);
 
 // C++:void cv::GaussianBlur(InputArray src, OutputArray dst, Size ksize, double sigmaX, double sigmaY = 0, int borderType = BORDER_DEFAULT)
 extern "C" void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, double sigmaX, double sigmaY, int borderType);
 
 // C++: cv::HoughLinesP(InputArray image, OutputArray lines, double rho,double theta,int threshold, double minLineLength = 0, double maxLineGap = 0) 
 extern "C" void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines, double rho, double theta, int threshold, double minLineLength, double maxLineGap);
-
-// C++: detectMultiScale(InputArray img, std::vector< Rect > & foundLocations, std::vector< double > & foundWeights, double hitThreshold = 0, Size winStride = Size(), Size padding = Size(), double scale = 1.05, double finalThreshold = 2.0, bool useMeanshiftGrouping = false)
-extern "C" void detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img, cv::Rect ***recs, int *nrecs, double **fWeights, int *n_fWeights, double hitThreshold, cv::Size* wins, cv::Size* pads, double scale, double finalThreshold, int useMeanshiftGrouping);
 
 extern "C" cv::Size* createSize();
 
@@ -90,9 +72,5 @@ extern "C" cv::Size* createSizeWithIntArgs(int w, int h);
 extern "C" cv::Size* createSizeWithDoubleArgs(double w, double h);
 
 extern "C" void freeSize(cv::Size* s);
-
-extern "C" void getDefaultPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out);
-
-extern "C" void getDaimlerPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out);
 
 #endif

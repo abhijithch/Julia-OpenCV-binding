@@ -15,7 +15,9 @@ LDFLAGS = -lopencv_highgui310 -lopencv_core310 -lopencv_calib3d310 -lopencv_feat
 
 SOURCE_DIR = ../src/cpp
 INCLUDE=-I C:/opencv/build64/install/include
-OBJECTS = $(BUILD_DIR)/Mat.o $(BUILD_DIR)/imgproc.o $(BUILD_DIR)/cv2.o $(BUILD_DIR)/videoio.o $(BUILD_DIR)/tracking.o
+OBJECTS = $(BUILD_DIR)/Mat.o $(BUILD_DIR)/core.o $(BUILD_DIR)/highgui.o \
+	$(BUILD_DIR)/imgproc.o $(BUILD_DIR)/objdetect.o \
+	$(BUILD_DIR)/videoio.o $(BUILD_DIR)/tracking.o
 
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	$(CXX) $(INCLUDE) $(CFLAGS) -c -o $@ $<

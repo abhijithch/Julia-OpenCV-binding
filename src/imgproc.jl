@@ -263,45 +263,8 @@ function equalizeHist(src::InputArray, dst::OutputArray)
     ccall((:equalizeHist, cv2_lib), Void, (Ptr{Void}, Ptr{Void},), src.handle, dst.handle)
 end
 
-type HOGDescriptor
-    handle::Ptr{Void}
-end
-
-function _HOGDescriptor(ptr::Ptr{Void})
-    hg = HOGDescriptor(ptr)
-    finalizer(hg, x -> ccall((:freeHOGDescriptor, cv2_lib),
-                             Void, (Ptr{Void}, ), x.handle))
-    return hg
-end
-
-HOGDescriptor() = _HOGDescriptor(ccall((:createHOGDescriptor, cv2_lib),Ptr{Void}, (())))
-
-# Member functions of HOGDescriptor
-setSVMDetector(hg::HOGDescriptor, _svmdetector::InputArray) =
-    ccall((:setSVMDetector, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, ), hg.handle, _svmDetector.handle)
-
 #Canny 
 Canny(image::InputArray, edges::OutputArray, thresh1::Real, thresh2::Real, apertureSize::Integer = 3, L2gradient::Bool = false) = ccall((:Canny, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cdouble, Cdouble, Cint, Cint), image.handle, edges.handle, thresh1, thresh2, apertureSize, Int(L2gradient))
-
-type CascadeClassifier
-    handle::Ptr{Void}
-end
-
-function _CascadeClassifier(ptr::Ptr{Void})
-    arr = CascadeClassifier(ptr)
-    finalizer(arr, x -> ccall((:freeCascadeClassifier, cv2_lib),
-                                Void, (Ptr{Void}, ), arr.handle))
-    return arr
-end
-
-CascadeClassifier() = _CascadeClassifier(ccall((:createCascadeClassifier, cv2_lib),
-                                            Ptr{Void}, ()))
-
-CascadeClassifier(path::AbstractString) = _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib), Ptr{Void}, (Cstring, ), path))
-
-function load(cc::CascadeClassifier, path::AbstractString)
-    ccall((:loadCCFromFile, cv2_lib), Void, (Ptr{Void}, Cstring), cc.handle, path)
-end
 
 function GaussianBlur(src::InputArray, dst::OutputArray, ksize::Tuple{Int, Int}, sigmaX::Float64, sigmaY::Float64, borderType::Int)
 
@@ -329,50 +292,3 @@ end
 Size() = _Size(ccall((:createSize, cv2_lib), Ptr{Void}, ()))
 
 Size(w, h) = _Size(ccall((:createSizeWithArgs,cv2_lib), Ptr{Void}, (Cint, Cint), w, h))
-
-function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0., 
-                            winStride = Size(), padding = Size(), scale = 1.05, 
-                            finalThreshold = 2.0, useMeanshiftGrouping=false)
-    recs = C_NULL
-    _nrecs = [0]
-    fWeights = C_NULL
-    _n_fWeights = [0]
-
-    ccall((:detectMultiScaleHOG, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Ptr{Ptr{Void}}}, Ptr{Cint}, 
-            Ptr{Ptr{Cdouble}}, Ptr{Cint}, Cdouble, Ptr{Cint}, Ptr{Cint}, Cdouble, Cdouble, Cint), hog.handle, 
-            img.handle, &recs, pointer(_nrecs), &fWeights, pointer(_n_fWeights), hitThreshold, winStride.handle, 
-            padding.handle, scale, finalThreshold, Int(useMeanshiftGrouping))
-    
-    nrecs = _nrecs[1]
-    n_fWeights = _n_fWeights[1]
-    recsarr = Array(Rect, nrecs)
-    recptr = reinterpret(Ptr{Ptr{Void}}, recs)
-    locs = pointer_to_array(recptr, nrecs)
-    for i = 1:nrecs
-        recsarr[i] = _Rect(locs[i])
-    end
-
-    wptr = reinterpret(Ptr{Cdouble}, fWeights)
-    ws = pointer_to_array(wptr, n_fWeights)
-
-    ccall((:freeDetectMultiScaleHOG, cv2_lib), Void, (Ptr{Void}, Ptr{Void}), recs, fWeights)
-
-    return recsarr, ws
-end 
-
-function getDefaultPeopleDetector(hog::HOGDescriptor)
-    out = Cfloat[]
-    n_out = [0]
-    ccall((:getDefaultPeopleDetector,cv2_lib), Void, (Ptr{Void}, Ptr{Cfloat}, Ptr{Cint}), 
-                hog.handle, pointer(out), pointer(n_out))
-    out, n_out
-end
-
-function getDaimlerPeopleDetector(hog::HOGDescriptor)
-    out = Cfloat[]
-    n_out = [0]
-    ccall((:getDaimlerPeopleDetector,cv2_lib), Void, (Ptr{Void}, Ptr{Cfloat}, Ptr{Cint}), 
-                hog.handle, pointer(out), pointer(n_out))
-    out, n_out
-end
-    
