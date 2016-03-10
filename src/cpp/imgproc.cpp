@@ -251,3 +251,21 @@ void freeSize(cv::Size* s)
 {
     delete s;
 }
+
+void getDefaultPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out)
+{
+    std::vector<float> outer;
+    outer = hog->getDefaultPeopleDetector();
+    *n_out = outer.size();
+    out = &outer[0];
+}
+
+void getDaimlerPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out)
+{
+    std::vector<float> outer;
+    outer = hog->getDaimlerPeopleDetector();
+    *n_out = outer.size();
+    out = &outer[0];
+}
+
+

@@ -359,3 +359,20 @@ function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0.
 
     return recsarr, ws
 end 
+
+function getDefaultPeopleDetector(hog::HOGDescriptor)
+    out = Cfloat[]
+    n_out = [0]
+    ccall((:getDefaultPeopleDetector,cv2_lib), Void, (Ptr{Void}, Ptr{Cfloat}, Ptr{Cint}), 
+                hog.handle, pointer(out), pointer(n_out))
+    out, n_out
+end
+
+function getDaimlerPeopleDetector(hog::HOGDescriptor)
+    out = Cfloat[]
+    n_out = [0]
+    ccall((:getDaimlerPeopleDetector,cv2_lib), Void, (Ptr{Void}, Ptr{Cfloat}, Ptr{Cint}), 
+                hog.handle, pointer(out), pointer(n_out))
+    out, n_out
+end
+    
