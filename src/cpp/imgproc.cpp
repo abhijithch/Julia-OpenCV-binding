@@ -73,7 +73,7 @@ void putText(cv::Mat *img, const char *text, cv::Point *org, int fontFace, doubl
 void polylines(cv::Mat *img, cv::Point **pts, int npts, bool isClosed, int *color, int thickness, int lineType, int shift)
 {
     using namespace cv;
-    vector<Point> contour;
+    std::vector<Point> contour;
     for (int i = 0; i < npts; i++)
         contour.push_back(*pts[i]);
 
@@ -159,4 +159,10 @@ void freeHOGDescriptor(cv::HOGDescriptor *hgd)
 void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector)
 {
     hg->setSVMDetector(*_svmdetector);
+}
+
+void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double thresh1, double thresh2, int apertureSize, int L2gradient)
+{
+    bool thing = (bool)(L2gradient);
+    cv::Canny(*image, *edges, thresh1, thresh2, apertureSize, thing);
 }

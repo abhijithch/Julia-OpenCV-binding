@@ -279,3 +279,6 @@ HOGDescriptor() = _HOGDescriptor(ccall((:createHOGDescriptor, cv2_lib),Ptr{Void}
 # Member functions of HOGDescriptor
 setSVMDetector(hg::HOGDescriptor, _svmdetector::InputArray) =
     ccall((:setSVMDetector, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, ), hg.handle, _svmDetector.handle)
+
+#Canny 
+Canny(image::InputArray, edges::OutputArray, thresh1::Real, thresh2::Real, apertureSize::Integer = 3, L2gradient::Bool = false) = ccall((:Canny, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cdouble, Cdouble, Cint, Cint), image.handle, edges.handle, thresh1, thresh2, apertureSize, Int(L2gradient))

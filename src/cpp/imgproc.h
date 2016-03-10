@@ -64,4 +64,6 @@ extern "C" void freeHOGDescriptor(cv::HOGDescriptor *);
 
 extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector);
 
+extern "C" void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double thresh1, double thresh2, int apertureSize, int L2gradient);
+
 #endif
