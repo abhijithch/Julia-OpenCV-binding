@@ -299,3 +299,7 @@ CascadeClassifier() = _CascadeClassifier(ccall((:createCascadeClassifier, cv2_li
 
 CascadeClassifier(path::AbstractString) = _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib),
                                                                 Ptr{Void}, (Cstring, ), path))
+
+function load(cc::CascadeClassifier, path::AbstractString)
+    ccall((:loadCCFromFile, cv2_lib), Void, (Ptr{Void}, Cstring), cc.handle, path)
+end

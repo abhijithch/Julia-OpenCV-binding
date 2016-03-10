@@ -181,3 +181,8 @@ void freeCascadeClassifier(cv::CascadeClassifier* cc)
 {
     delete cc;
 }
+
+void loadCCFromFile(cv::CascadeClassifier* cc, char* path)
+{
+    cc->load(path);
+}

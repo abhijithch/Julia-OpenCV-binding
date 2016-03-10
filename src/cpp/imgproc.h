@@ -72,4 +72,6 @@ extern "C" cv::CascadeClassifier* createCascadeClassifierWithString(char* path);
 
 extern "C" void freeCascadeClassifer(cv::CascadeClassifier* cc);
 
+extern "C" void loadCCFromFile(cv::CascadeClassifier* cc, char* path);
+
 #endif
