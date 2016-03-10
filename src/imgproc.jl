@@ -315,3 +315,47 @@ function HoughLinesP(image::InputArray, lines::OutputArray, rho::Float64, theta:
 
     ccall((:HoughLinesP, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Float64, Float64, Cint, Float64, Float64,), image.handle, lines.handle, rho, theta, threshold, minLineLength, maxLineGap)
 end
+
+type Size
+    handle::Ptr{Void}
+end
+
+function _Size(ptr::Ptr{Void})
+    s = Size(ptr)
+    finalizer(s, x -> ccall((:freeSize, cv2_lib), Void, (Ptr{Void},), x.handle)) 
+    s
+end
+
+Size() = _Size(ccall((:createSize, cv2_lib), Ptr{Void}, ()))
+
+Size(w, h) = _Size(ccall((:createSizeWithArgs,cv2_lib), Ptr{Void}, (Cint, Cint), w, h))
+
+function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0., 
+                            winStride = Size(), padding = Size(), scale = 1.05, 
+                            finalThreshold = 2.0, useMeanshiftGrouping=false)
+    recs = C_NULL
+    _nrecs = [0]
+    fWeights = C_NULL
+    _n_fWeights = [0]
+
+    ccall((:detectMultiScaleHOG, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Ptr{Ptr{Void}}}, Ptr{Cint}, 
+            Ptr{Ptr{Cdouble}}, Ptr{Cint}, Cdouble, Ptr{Cint}, Ptr{Cint}, Cdouble, Cdouble, Cint), hog.handle, 
+            img.handle, &recs, pointer(_nrecs), &fWeights, pointer(_n_fWeights), hitThreshold, winStride.handle, 
+            padding.handle, scale, finalThreshold, Int(useMeanshiftGrouping))
+    
+    nrecs = _nrecs[1]
+    n_fWeights = _n_fWeights[1]
+    recsarr = Array(Rect, nrecs)
+    recptr = reinterpret(Ptr{Ptr{Void}}, recs)
+    locs = pointer_to_array(recptr, nrecs)
+    for i = 1:nrecs
+        recsarr[i] = _Rect(locs[i])
+    end
+
+    wptr = reinterpret(Ptr{Cdouble}, fWeights)
+    ws = pointer_to_array(wptr, n_fWeights)
+
+    ccall((:freeDetectMultiScaleHOG, cv2_lib), Void, (Ptr{Void}, Ptr{Void}), recs, fWeights)
+
+    return recsarr, ws
+end 

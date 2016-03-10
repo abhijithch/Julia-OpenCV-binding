@@ -188,19 +188,38 @@ void loadCCFromFile(cv::CascadeClassifier* cc, char* path)
     cc->load(path);
 }
     
-void detectMultiScale(cv::_InputArray *img, cv::Rect **recs, int nrecs, double **fWeights, int n_fWeights, double hitThreshold, int *winStride, int *padding, double scale, double finalThreshold, int useMeanshiftGrouping)
+void detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img, cv::Rect ***recs, 
+                            int *nrecs, double **fWeights, int *n_fWeights, double hitThreshold, 
+                            cv::Size* wins, cv::Size* pads, double scale, double finalThreshold, 
+                            int useMeanshiftGrouping)
 {
-  std::vector<cv::Rect> foundLocations;
-  for (int i = 0; i < nrecs; i++)
-    foundLocations.push_back(*recs[i]);
-  std::vector<double> foundWeights;
-  for (int i = 0; i < n_fWeights; i++)
-    foundWeights.push_back(*fWeights[i]);
-  wins=cv::Size(winstride[0],winstride[1]);
-  pads=cv::Size(winstride[0],winstride[1]);
+    std::vector<cv::Rect> foundLocations;
+    std::vector<double> foundWeights;
 
-  cv::detectMultiScale(*img, foundLocations, foundWeights, hitThreshold, wins, pads, scale, finalThreshold, useMeanshiftGrouping);
-  
+    hog->detectMultiScale(*img, foundLocations, foundWeights, hitThreshold, *wins, 
+                            *pads, scale, finalThreshold, useMeanshiftGrouping);
+
+    *nrecs = foundLocations.size();
+    *n_fWeights = foundWeights.size();
+
+    *recs = new cv::Rect*[*nrecs];
+    *fWeights = new double[*n_fWeights];
+
+    for (int i = 0; i < *nrecs; i++)
+    {
+        cv::Rect t = foundLocations.at(i); 
+        *recs[i] = new cv::Rect(t);
+    }
+    for (int i = 0; i < *n_fWeights; i++)
+    {
+         *fWeights[i] = foundWeights.at(i);
+    }
+}
+
+void freeDetectMultiScaleHOG(cv::Rect ***recs, double **fWeights)
+{
+    delete [] *recs;
+    delete [] *fWeights;
 }
 
 void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, double sigmaX, double sigmaY, int borderType)
@@ -211,4 +230,24 @@ void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, doubl
 void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines, double rho,double theta, int threshold, double minLineLength, double maxLineGap)
 {
     cv::HoughLinesP(*image, *lines, rho, theta, threshold, minLineLength, maxLineGap);
+}
+
+cv::Size* createSize()
+{
+    return new cv::Size();
+}
+
+cv::Size* createSizeWithIntArgs(int w, int h)
+{
+    return new cv::Size(w,h);
+}
+
+cv::Size* createSizeWithDoubleArgs(double w, double h)
+{
+    return new cv::Size(w,h);
+}
+
+void freeSize(cv::Size* s)
+{
+    delete s;
 }

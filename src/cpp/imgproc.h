@@ -81,6 +81,14 @@ extern "C" void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *k
 extern "C" void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines, double rho, double theta, int threshold, double minLineLength, double maxLineGap);
 
 // C++: detectMultiScale(InputArray img, std::vector< Rect > & foundLocations, std::vector< double > & foundWeights, double hitThreshold = 0, Size winStride = Size(), Size padding = Size(), double scale = 1.05, double finalThreshold = 2.0, bool useMeanshiftGrouping = false)
-void detectMultiScale(cv::_InputArray *img, cv::Rect **recs, int nrecs, double **fWeights, int n_fWeights, double hitThreshold, int *winStride, int *padding, double scale, double finalThreshold, int useMeanshiftGrouping);
+extern "C" void detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img, cv::Rect ***recs, int *nrecs, double **fWeights, int *n_fWeights, double hitThreshold, cv::Size* *wins, cv::Size* pads, double scale, double finalThreshold, int useMeanshiftGrouping);
+
+extern "C" cv::Size* createSize();
+
+extern "C" cv::Size* createSizeWithIntArgs(int w, int h);
+
+extern "C" cv::Size* createSizeWithDoubleArgs(double w, double h);
+
+extern "C" void freeSize(cv::Size* s);
 
 #endif
