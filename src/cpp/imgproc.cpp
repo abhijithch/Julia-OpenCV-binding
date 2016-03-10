@@ -166,3 +166,18 @@ void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double thresh1, doub
     bool thing = (bool)(L2gradient);
     cv::Canny(*image, *edges, thresh1, thresh2, apertureSize, thing);
 }
+
+cv::CascadeClassifier* createCascadeClassifier()
+{
+    return new cv::CascadeClassifier();
+}
+
+cv::CascadeClassifier* createCascadeClassifierWithString(char *path)
+{
+    return new cv::CascadeClassifier(path);
+}
+
+void freeCascadeClassifier(cv::CascadeClassifier* cc)
+{
+    delete cc;
+}

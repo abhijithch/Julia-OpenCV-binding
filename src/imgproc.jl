@@ -282,3 +282,20 @@ setSVMDetector(hg::HOGDescriptor, _svmdetector::InputArray) =
 
 #Canny 
 Canny(image::InputArray, edges::OutputArray, thresh1::Real, thresh2::Real, apertureSize::Integer = 3, L2gradient::Bool = false) = ccall((:Canny, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Cdouble, Cdouble, Cint, Cint), image.handle, edges.handle, thresh1, thresh2, apertureSize, Int(L2gradient))
+
+type CascadeClassifier
+    handle::Ptr{Void}
+end
+
+function _CascadeClassifier(ptr::Ptr{Void})
+    arr = CascadeClassifier(ptr)
+    finalizer(arr, x -> ccall((:freeCascadeClassifier, cv2_lib),
+                                Void, (Ptr{Void}, ), arr.handle))
+    return arr
+end
+
+CascadeClassifier() = _CascadeClassifier(ccall((:createCascadeClassifier, cv2_lib),
+                                            Ptr{Void}, ()))
+
+CascadeClassifier(path::AbstractString) = _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib),
+                                                                Ptr{Void}, (Cstring, ), path))

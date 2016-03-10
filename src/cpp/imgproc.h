@@ -66,4 +66,10 @@ extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetec
 
 extern "C" void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double thresh1, double thresh2, int apertureSize, int L2gradient);
 
+extern "C" cv::CascadeClassifier* createCascadeClassifier();
+
+extern "C" cv::CascadeClassifier* createCascadeClassifierWithString(char* path);
+
+extern "C" void freeCascadeClassifer(cv::CascadeClassifier* cc);
+
 #endif
