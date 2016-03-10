@@ -246,5 +246,8 @@ extern "C" cv::_OutputArray* createOutputArray();
 extern "C" cv::_OutputArray* createOutputArrayWithMat(cv::Mat *);
 extern "C" void freeOutputArray(cv::_OutputArray *);
 
+extern "C" cv::Rect* createRect();
+extern "C" void freeRect(cv::Rect *);
+
 #endif 
 // MAT_H

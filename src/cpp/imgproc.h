@@ -74,4 +74,13 @@ extern "C" void freeCascadeClassifer(cv::CascadeClassifier* cc);
 
 extern "C" void loadCCFromFile(cv::CascadeClassifier* cc, char* path);
 
+// C++:void cv::GaussianBlur(InputArray src, OutputArray dst, Size ksize, double sigmaX, double sigmaY = 0, int borderType = BORDER_DEFAULT)
+extern "C" void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, double sigmaX, double sigmaY, int borderType);
+
+// C++: cv::HoughLinesP(InputArray image, OutputArray lines, double rho,double theta,int threshold, double minLineLength = 0, double maxLineGap = 0) 
+extern "C" void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines, double rho, double theta, int threshold, double minLineLength, double maxLineGap);
+
+// C++: detectMultiScale(InputArray img, std::vector< Rect > & foundLocations, std::vector< double > & foundWeights, double hitThreshold = 0, Size winStride = Size(), Size padding = Size(), double scale = 1.05, double finalThreshold = 2.0, bool useMeanshiftGrouping = false)
+void detectMultiScale(cv::_InputArray *img, cv::Rect **recs, int nrecs, double **fWeights, int n_fWeights, double hitThreshold, int *winStride, int *padding, double scale, double finalThreshold, int useMeanshiftGrouping);
+
 #endif

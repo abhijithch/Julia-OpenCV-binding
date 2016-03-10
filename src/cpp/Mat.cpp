@@ -417,3 +417,13 @@ void freeOutputArray(cv::_OutputArray *arr)
 {
     delete arr;
 }
+
+cv::Rect* createRect()
+{
+  return new cv::Rect();
+}
+
+void freeRect(cv::Rect *rec)
+{
+  delete rec;
+}

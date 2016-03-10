@@ -135,3 +135,17 @@ OutputArray() = _OutputArray(ccall((:createOutputArray, cv2_lib),
 
 OutputArray(mat) = _OutputArray(ccall((:createOutputArrayWithMat, cv2_lib),
                                       Ptr{Void}, (Ptr{Void}, ), mat.handle))
+
+
+type Rect
+    handle::Ptr{Void}
+end
+
+function _Rect(ptr::Ptr{Void})
+    rec = InputArray(ptr)
+    finalizer(rec, x -> ccall((:freeRect, cv2_lib),
+                              Void, (Ptr{Void}, ), x.handle))
+    return rec
+end
+
+Rect() = _Rect(ccall((:createRect, cv2_lib), Ptr{Void}, ()))

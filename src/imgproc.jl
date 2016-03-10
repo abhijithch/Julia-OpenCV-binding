@@ -297,9 +297,21 @@ end
 CascadeClassifier() = _CascadeClassifier(ccall((:createCascadeClassifier, cv2_lib),
                                             Ptr{Void}, ()))
 
-CascadeClassifier(path::AbstractString) = _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib),
-                                                                Ptr{Void}, (Cstring, ), path))
+CascadeClassifier(path::AbstractString) = _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib), Ptr{Void}, (Cstring, ), path))
 
 function load(cc::CascadeClassifier, path::AbstractString)
     ccall((:loadCCFromFile, cv2_lib), Void, (Ptr{Void}, Cstring), cc.handle, path)
+end
+
+function GaussianBlur(src::InputArray, dst::OutputArray, ksize::Tuple{Int, Int}, sigmaX::Float64, sigmaY::Float64, borderType::Int)
+
+    sizeX = convert(Int32, ksize[1])
+    sizeY = convert(Int32, ksize[2])
+    sizePtr = [sizeX, sizeY]
+    ccall((:GaussianBlur, vc2_lib), Void, (Ptr{Void}, Ptr{Void}, Ptr{Int32}, Float64, Float64, Cint,), src.handle, dst.handle, sizePtr, sigmaX, sigmaY, borderType)
+end
+
+function HoughLinesP(image::InputArray, lines::OutputArray, rho::Float64, theta::Float64,threshold::Int, minLineLength::Float64 = 0, maxLineGap::Float64=0)
+
+    ccall((:HoughLinesP, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, Float64, Float64, Cint, Float64, Float64,), image.handle, lines.handle, rho, theta, threshold, minLineLength, maxLineGap)
 end

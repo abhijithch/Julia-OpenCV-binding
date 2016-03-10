@@ -9,7 +9,8 @@ using namespace std;
 
 cv::Point* setPoint(int x, int y)
 {
-    return new cv::Point(x, y);
+    cv::Point *pt = new cv::Point(x, y);
+    return pt;
 }
 
 void freePoint(cv::Point *ptr)
@@ -185,4 +186,29 @@ void freeCascadeClassifier(cv::CascadeClassifier* cc)
 void loadCCFromFile(cv::CascadeClassifier* cc, char* path)
 {
     cc->load(path);
+}
+    
+void detectMultiScale(cv::_InputArray *img, cv::Rect **recs, int nrecs, double **fWeights, int n_fWeights, double hitThreshold, int *winStride, int *padding, double scale, double finalThreshold, int useMeanshiftGrouping)
+{
+  std::vector<cv::Rect> foundLocations;
+  for (int i = 0; i < nrecs; i++)
+    foundLocations.push_back(*recs[i]);
+  std::vector<double> foundWeights;
+  for (int i = 0; i < n_fWeights; i++)
+    foundWeights.push_back(*fWeights[i]);
+  wins=cv::Size(winstride[0],winstride[1]);
+  pads=cv::Size(winstride[0],winstride[1]);
+
+  cv::detectMultiScale(*img, foundLocations, foundWeights, hitThreshold, wins, pads, scale, finalThreshold, useMeanshiftGrouping);
+  
+}
+
+void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, double sigmaX, double sigmaY, int borderType)
+{
+    cv::GaussianBlur(*src, *dst, cv::Size(ksize[0],ksize[1]), sigmaX, sigmaY, borderType);
+}
+
+void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines, double rho,double theta, int threshold, double minLineLength, double maxLineGap)
+{
+    cv::HoughLinesP(*image, *lines, rho, theta, threshold, minLineLength, maxLineGap);
 }
