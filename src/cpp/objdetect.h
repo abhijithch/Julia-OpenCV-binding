@@ -17,8 +17,8 @@ extern "C" cv::Rect **detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArra
 					  double finalThreshold, int useMeanshiftGrouping,
 					  int *nrecs, int *nfw);
 
-extern "C" void getDefaultPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out);
-extern "C" void getDaimlerPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out);
+extern "C" float *getDefaultPeopleDetector(cv::HOGDescriptor* hog, int* n_out);
+extern "C" float *getDaimlerPeopleDetector(cv::HOGDescriptor* hog, int* n_out);
 
 
 //     CV_WRAP_AS(detectMultiScale2) void detectMultiScale( InputArray image,

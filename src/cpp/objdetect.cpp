@@ -62,20 +62,28 @@ cv::Rect **detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img,
     return ret;
 }
 
-void getDefaultPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out)
+float *getPeopleDetector(std::vector<float> outer, int *nout)
+{
+    *nout = outer.size();
+    float *out = (float *)malloc(sizeof(float) * (*nout));
+    for (int i = 0; i < *nout; i++) {
+	out[i] = outer.at(i);
+    }
+    return out;
+}
+
+float *getDefaultPeopleDetector(cv::HOGDescriptor *hog, int *nout)
 {
     std::vector<float> outer;
     outer = hog->getDefaultPeopleDetector();
-    *n_out = outer.size();
-    out = &outer[0];
+    return getPeopleDetector(outer, nout);
 }
 
-void getDaimlerPeopleDetector(cv::HOGDescriptor* hog, float* out, int* n_out)
+float *getDaimlerPeopleDetector(cv::HOGDescriptor* hog, int *nout)
 {
     std::vector<float> outer;
     outer = hog->getDaimlerPeopleDetector();
-    *n_out = outer.size();
-    out = &outer[0];
+    return getPeopleDetector(outer, nout);
 }
 
 cv::Rect **detectMultiScaleCC1(cv::CascadeClassifier *cc, cv::_InputArray *image,
