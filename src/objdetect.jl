@@ -66,7 +66,7 @@ function getDefaultPeopleDetector(hog::HOGDescriptor)
     outptr = ccall((:getDefaultPeopleDetector,cv2_lib), Ptr{Cfloat}, (Ptr{Void}, Ptr{Cint}), 
                    hog.handle, pointer(_nout))
     nout = _nout[1]
-    return pointer_to_array(outptr, nout)
+    return pointer_to_array(outptr, nout, true)
 end
 
 function getDaimlerPeopleDetector(hog::HOGDescriptor)
@@ -74,7 +74,7 @@ function getDaimlerPeopleDetector(hog::HOGDescriptor)
     outptr = ccall((:getDaimlerPeopleDetector,cv2_lib), Ptr{Cfloat}, (Ptr{Void}, Ptr{Cint}), 
                    hog.handle, pointer(_nout))
     nout = _nout[1]
-    return pointer_to_array(outptr, nout)
+    return pointer_to_array(outptr, nout, true)
 end
 
 # Returns an array of rects and numDetects

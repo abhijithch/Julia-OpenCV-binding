@@ -249,5 +249,14 @@ extern "C" void freeOutputArray(cv::_OutputArray *);
 extern "C" cv::Rect* createRect();
 extern "C" void freeRect(cv::Rect *);
 
+extern "C" unsigned char *mat_getindex_Cuchar(cv::Mat *m, int i, int j);
+extern "C" char *mat_getindex_Cchar(cv::Mat *m, int i, int j);
+extern "C" unsigned short *mat_getindex_Cushort(cv::Mat *m, int i, int j);
+extern "C" short *mat_getindex_Cshort(cv::Mat *m, int i, int j);
+extern "C" int *mat_getindex_Cint(cv::Mat *m, int i, int j);
+extern "C" float *mat_getindex_Cfloat(cv::Mat *m, int i, int j);
+extern "C" double *mat_getindex_Cdouble(cv::Mat *m, int i, int j);
+extern "C" void *mat_getindex_dispatcher(int type, cv::Mat *m, int i, int j);
+
 #endif 
 // MAT_H
