@@ -403,6 +403,11 @@ void freeInputArray(cv::_InputArray *arr)
     delete arr;
 }
 
+int inputArrayType(cv::_InputArray *arr)
+{
+    return arr->type();
+}
+
 cv::_OutputArray* createOutputArray()
 {
     return new cv::_OutputArray();

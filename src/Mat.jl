@@ -115,6 +115,9 @@ InputArray() = _InputArray(ccall((:createInputArray, cv2_lib),
 InputArray(mat) = _InputArray(ccall((:createInputArrayWithMat, cv2_lib),
                                     Ptr{Void}, (Ptr{Void}, ), mat.handle))
 
+matType(iarr::InputArray) = ccall((:inputArrayType, cv2_lib), Cint,
+                                  (Ptr{Void}, ), iarr.handle)
+
 type OutputArray
     handle::Ptr{Void}
 end

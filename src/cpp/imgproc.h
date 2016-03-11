@@ -63,7 +63,14 @@ extern "C" void Canny(cv::_InputArray *image, cv::_OutputArray *edges, double th
 extern "C" void GaussianBlur(cv::_InputArray *src, cv::_OutputArray *dst, int *ksize, double sigmaX, double sigmaY, int borderType);
 
 // C++: cv::HoughLinesP(InputArray image, OutputArray lines, double rho,double theta,int threshold, double minLineLength = 0, double maxLineGap = 0) 
-extern "C" void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines, double rho, double theta, int threshold, double minLineLength, double maxLineGap);
+extern "C" void HoughLinesP(cv::_InputArray *image, cv::_OutputArray *lines,
+			    double rho, double theta, int threshold,
+			    double minLineLength, double maxLineGap);
+
+extern "C" float *HoughLinesPVec4f(cv::_InputArray *arr, double rho,
+				   double theta, int threshold,
+				   double minLineLength, double maxLineGap,
+				   int *len);
 
 extern "C" cv::Size* createSize();
 
