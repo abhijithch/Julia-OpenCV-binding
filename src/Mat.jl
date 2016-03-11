@@ -200,7 +200,44 @@ end
 getindex(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}) = nothing
 
 # Set a scalar or vector value to the specified index
-setindex!(img::Mat, i::Int, j::Int, val) = nothing
+function setindex!(img::Mat, val, i::Int, j::Int)
+    _val = isa(val, Array) ? val : [val]
+    _setindex(img, _val, i, j)
+end
+
+function _setindex(img::Mat, val, i::Int, j::Int)
+    t = CV_DEPTH_TO_JULIA_TYPE_MAP[depth(img)]     # Type of each cell
+    nelems = channels(img)
+
+    # Check whether val is of required type and length.
+    if length(val) != nelems
+        error("Cannot assign vector of size $(length(val)) when image has $nelems channels")
+    end
+
+    conval = []
+    try
+        conval = map(t, val)
+    catch e
+        if isa(e, InexactError)
+            error("Unable to convert input values to the required depth of the image.  Please check inputs")
+        else
+            throw(e)
+        end
+    end
+    setindex_by_type(t, img, conval, i, j)
+    return val
+end
+
+for t in [:Cuchar, :Cchar, :Cushort, :Cshort, :Cint, :Cfloat, :Cdouble]
+    q = quote
+        function setindex_by_type(::Type{$t}, img, val, i, j)
+            ccall((:mat_setindex_dispatcher, cv2_lib), Void,
+                  (Cint, Ptr{Void}, Cint, Cint, Ptr{$t}),
+                  JULIA_TYPE_TO_CV_DEPTH_MAP[$t], img.handle, i, j, pointer(val))
+        end
+    end
+    eval(q)
+end
 
 # Set a scalar or vector value to the specified index
 setindex!(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}, val) = nothing

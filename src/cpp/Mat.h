@@ -258,5 +258,14 @@ extern "C" float *mat_getindex_Cfloat(cv::Mat *m, int i, int j);
 extern "C" double *mat_getindex_Cdouble(cv::Mat *m, int i, int j);
 extern "C" void *mat_getindex_dispatcher(int type, cv::Mat *m, int i, int j);
 
+extern "C" void mat_setindex_Cuchar(cv::Mat *m, int i, int j, unsigned char *val);
+extern "C" void mat_setindex_Cchar(cv::Mat *m, int i, int j, char *val);
+extern "C" void mat_setindex_Cushort(cv::Mat *m, int i, int j, unsigned short *val);
+extern "C" void mat_setindex_Cshort(cv::Mat *m, int i, int j, short *val);
+extern "C" void mat_setindex_Cint(cv::Mat *m, int i, int j, int *val);
+extern "C" void mat_setindex_Cfloat(cv::Mat *m, int i, int j, float *val);
+extern "C" void mat_setindex_Cdouble(cv::Mat *m, int i, int j, double *val);
+extern "C" void mat_setindex_dispatcher(int type, cv::Mat *m, int i, int j, void *val);
+
 #endif 
 // MAT_H
