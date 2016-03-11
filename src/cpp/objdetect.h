@@ -8,7 +8,8 @@ extern "C" void freeCascadeClassifer(cv::CascadeClassifier* cc);
 extern "C" void loadCCFromFile(cv::CascadeClassifier* cc, char* path);
 extern "C" cv::HOGDescriptor* createHOGDescriptor();
 extern "C" void freeHOGDescriptor(cv::HOGDescriptor *);
-extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector);
+extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *svmdetector);
+extern "C" void setSVMDetectorWithFloatArray(cv::HOGDescriptor *, float *, int);
 
 // C++: detectMultiScale(InputArray img, std::vector< Rect > & foundLocations, std::vector< double > & foundWeights, double hitThreshold = 0, Size winStride = Size(), Size padding = Size(), double scale = 1.05, double finalThreshold = 2.0, bool useMeanshiftGrouping = false)
 extern "C" cv::Rect **detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img,

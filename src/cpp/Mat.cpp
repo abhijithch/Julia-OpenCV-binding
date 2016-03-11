@@ -403,6 +403,11 @@ void freeInputArray(cv::_InputArray *arr)
     delete arr;
 }
 
+int inputArrayType(cv::_InputArray *arr)
+{
+    return arr->type();
+}
+
 cv::_OutputArray* createOutputArray()
 {
     return new cv::_OutputArray();
@@ -426,4 +431,370 @@ cv::Rect* createRect()
 void freeRect(cv::Rect *rec)
 {
   delete rec;
+}
+
+
+/* 
+   ----------------------------------------------
+   | Get and set index functions for Mat        |
+   ----------------------------------------------
+*/
+#define COPY_ELEMS_TO_PTR {        \
+for (int i = 0; i < nelems; i++) { \
+    ret[i] = vec[i];               \
+ } }
+
+unsigned char *mat_getindex_Cuchar(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    unsigned char *ret = (unsigned char *)malloc(sizeof(unsigned char) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<unsigned char>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2b vec = m->at<cv::Vec2b>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3b vec = m->at<cv::Vec3b>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4b vec = m->at<cv::Vec4b>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+char *mat_getindex_Cchar(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    char *ret = (char *)malloc(sizeof(char) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<char>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2b vec = m->at<cv::Vec2b>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3b vec = m->at<cv::Vec3b>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4b vec = m->at<cv::Vec4b>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+unsigned short *mat_getindex_Cushort(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    unsigned short *ret = (unsigned short *)malloc(sizeof(unsigned short) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<unsigned short>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2w vec = m->at<cv::Vec2w>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3w vec = m->at<cv::Vec3w>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4w vec = m->at<cv::Vec4w>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+short *mat_getindex_Cshort(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    short *ret = (short *)malloc(sizeof(short) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<short>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2s vec = m->at<cv::Vec2s>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3s vec = m->at<cv::Vec3s>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4s vec = m->at<cv::Vec4s>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+int *mat_getindex_Cint(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    int *ret = (int *)malloc(sizeof(int) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<int>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2i vec = m->at<cv::Vec2i>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3i vec = m->at<cv::Vec3i>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4i vec = m->at<cv::Vec4i>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+float *mat_getindex_Cfloat(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    float *ret = (float *)malloc(sizeof(float) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<float>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2f vec = m->at<cv::Vec2f>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3f vec = m->at<cv::Vec3f>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4f vec = m->at<cv::Vec4f>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+double *mat_getindex_Cdouble(cv::Mat *m, int i, int j)
+{
+    int nelems = m->channels();
+    double *ret = (double *)malloc(sizeof(double) * nelems);
+
+    if (nelems == 1) {
+	ret[0] = m->at<double>(i, j);
+	return ret;
+    } else if (nelems == 2) {
+	cv::Vec2d vec = m->at<cv::Vec2d>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 3) {
+	cv::Vec3d vec = m->at<cv::Vec3d>(i, j);
+	COPY_ELEMS_TO_PTR;
+    } else if (nelems == 4) {
+	cv::Vec4d vec = m->at<cv::Vec4d>(i, j);
+	COPY_ELEMS_TO_PTR;
+    }
+    return ret;
+}
+
+void *mat_getindex_dispatcher(int type, cv::Mat *m, int i, int j)
+{
+    switch(type) {
+    case CV_8U:
+	return mat_getindex_Cuchar(m, i, j);
+	break;
+    case CV_8S:
+	return mat_getindex_Cchar(m, i, j);
+	break;
+    case CV_16U:
+	return mat_getindex_Cushort(m, i, j);
+	break;
+    case CV_16S:
+	return mat_getindex_Cshort(m, i, j);
+	break;
+    case CV_32S:
+	return mat_getindex_Cint(m, i, j);
+	break;
+    case CV_32F:
+	return mat_getindex_Cfloat(m, i, j);
+	break;
+    case CV_64F:
+	return mat_getindex_Cdouble(m, i, j);
+	break;
+    }
+    return NULL;
+}
+
+#define COPY_ELEMS_TO_VEC {        \
+for (int i = 0; i < nelems; i++) { \
+    vec[i] = val[i];		   \
+ } }
+
+void mat_setindex_Cuchar(cv::Mat *m, int i, int j, unsigned char *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<unsigned char>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2b vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2b>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3b vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3b>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4b vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4b>(i, j) = vec;
+    }
+}
+
+void mat_setindex_Cchar(cv::Mat *m, int i, int j, char *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<char>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2b vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2b>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3b vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3b>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4b vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4b>(i, j) = vec;
+    }
+}
+
+void mat_setindex_Cushort(cv::Mat *m, int i, int j, unsigned short *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<unsigned short>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2w vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2w>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3w vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3w>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4w vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4w>(i, j) = vec;
+    }
+}
+
+void mat_setindex_Cshort(cv::Mat *m, int i, int j, short *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<short>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2s vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2s>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3s vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3s>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4s vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4s>(i, j) = vec;
+    }
+}
+
+void mat_setindex_Cint(cv::Mat *m, int i, int j, int *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<int>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2i vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2i>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3i vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3i>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4i vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4i>(i, j) = vec;
+    }
+}
+
+void mat_setindex_Cfloat(cv::Mat *m, int i, int j, float *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<short>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2f vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2f>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3f vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3f>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4f vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4f>(i, j) = vec;
+    }
+}
+
+void mat_setindex_Cdouble(cv::Mat *m, int i, int j, double *val)
+{
+    int nelems = m->channels();
+
+    if (nelems == 1) {
+	m->at<short>(i, j) = val[0];
+    } else if (nelems == 2) {
+	cv::Vec2d vec(0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec2d>(i, j) = vec;
+    } else if (nelems == 3) {
+	cv::Vec3d vec(0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec3d>(i, j) = vec;
+    } else if (nelems == 4) {
+	cv::Vec4d vec(0, 0, 0, 0);
+	COPY_ELEMS_TO_VEC;
+	m->at<cv::Vec4d>(i, j) = vec;
+    }
+}
+
+
+void mat_setindex_dispatcher(int type, cv::Mat *m, int i, int j, void *val)
+{
+    switch(type) {
+    case CV_8U:
+	return mat_setindex_Cuchar(m, i, j, (unsigned char *)val);
+	break;
+    case CV_8S:
+	return mat_setindex_Cchar(m, i, j, (char *)val);
+	break;
+    case CV_16U:
+	return mat_setindex_Cushort(m, i, j, (unsigned short *)val);
+	break;
+    case CV_16S:
+	return mat_setindex_Cshort(m, i, j, (short *)val);
+	break;
+    case CV_32S:
+	return mat_setindex_Cint(m, i, j, (int *)val);
+	break;
+    case CV_32F:
+	return mat_setindex_Cfloat(m, i, j, (float *)val);
+	break;
+    case CV_64F:
+	return mat_setindex_Cdouble(m, i, j, (double *)val);
+	break;
+    }
 }

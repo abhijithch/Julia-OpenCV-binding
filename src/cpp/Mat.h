@@ -242,12 +242,31 @@ extern "C" cv::Mat* zeros(int rows, int cols, int type);
 extern "C" cv::_InputArray* createInputArray();
 extern "C" cv::_InputArray* createInputArrayWithMat(cv::Mat *);
 extern "C" void freeInputArray(cv::_InputArray *);
+extern "C" int inputArrayType(cv::_InputArray *);
 extern "C" cv::_OutputArray* createOutputArray();
 extern "C" cv::_OutputArray* createOutputArrayWithMat(cv::Mat *);
 extern "C" void freeOutputArray(cv::_OutputArray *);
 
 extern "C" cv::Rect* createRect();
 extern "C" void freeRect(cv::Rect *);
+
+extern "C" unsigned char *mat_getindex_Cuchar(cv::Mat *m, int i, int j);
+extern "C" char *mat_getindex_Cchar(cv::Mat *m, int i, int j);
+extern "C" unsigned short *mat_getindex_Cushort(cv::Mat *m, int i, int j);
+extern "C" short *mat_getindex_Cshort(cv::Mat *m, int i, int j);
+extern "C" int *mat_getindex_Cint(cv::Mat *m, int i, int j);
+extern "C" float *mat_getindex_Cfloat(cv::Mat *m, int i, int j);
+extern "C" double *mat_getindex_Cdouble(cv::Mat *m, int i, int j);
+extern "C" void *mat_getindex_dispatcher(int type, cv::Mat *m, int i, int j);
+
+extern "C" void mat_setindex_Cuchar(cv::Mat *m, int i, int j, unsigned char *val);
+extern "C" void mat_setindex_Cchar(cv::Mat *m, int i, int j, char *val);
+extern "C" void mat_setindex_Cushort(cv::Mat *m, int i, int j, unsigned short *val);
+extern "C" void mat_setindex_Cshort(cv::Mat *m, int i, int j, short *val);
+extern "C" void mat_setindex_Cint(cv::Mat *m, int i, int j, int *val);
+extern "C" void mat_setindex_Cfloat(cv::Mat *m, int i, int j, float *val);
+extern "C" void mat_setindex_Cdouble(cv::Mat *m, int i, int j, double *val);
+extern "C" void mat_setindex_dispatcher(int type, cv::Mat *m, int i, int j, void *val);
 
 #endif 
 // MAT_H

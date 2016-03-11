@@ -33,9 +33,13 @@ end
 HOGDescriptor() = _HOGDescriptor(ccall((:createHOGDescriptor, cv2_lib),Ptr{Void}, (())))
 
 # Member functions of HOGDescriptor
-setSVMDetector(hg::HOGDescriptor, _svmdetector::InputArray) =
+setSVMDetector(hg::HOGDescriptor, svmdetector::InputArray) =
     ccall((:setSVMDetector, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, ),
-          hg.handle, _svmDetector.handle)
+          hg.handle, svmDetector.handle)
+
+setSVMDetector(hg::HOGDescriptor, svmdetector::Array{Cfloat}) =
+    ccall((:setSVMDetectorWithFloatArray, cv2_lib), Void, (Ptr{Void}, Ptr{Cfloat}, Cint),
+          hg.handle, pointer(svmdetector), length(svmdetector))
 
 # Returns an array of rects and fWeights
 function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0., 
@@ -66,7 +70,7 @@ function getDefaultPeopleDetector(hog::HOGDescriptor)
     outptr = ccall((:getDefaultPeopleDetector,cv2_lib), Ptr{Cfloat}, (Ptr{Void}, Ptr{Cint}), 
                    hog.handle, pointer(_nout))
     nout = _nout[1]
-    return pointer_to_array(outptr, nout)
+    return pointer_to_array(outptr, nout, true)
 end
 
 function getDaimlerPeopleDetector(hog::HOGDescriptor)
@@ -74,7 +78,7 @@ function getDaimlerPeopleDetector(hog::HOGDescriptor)
     outptr = ccall((:getDaimlerPeopleDetector,cv2_lib), Ptr{Cfloat}, (Ptr{Void}, Ptr{Cint}), 
                    hog.handle, pointer(_nout))
     nout = _nout[1]
-    return pointer_to_array(outptr, nout)
+    return pointer_to_array(outptr, nout, true)
 end
 
 # Returns an array of rects and numDetects
