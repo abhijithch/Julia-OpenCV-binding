@@ -33,9 +33,13 @@ end
 HOGDescriptor() = _HOGDescriptor(ccall((:createHOGDescriptor, cv2_lib),Ptr{Void}, (())))
 
 # Member functions of HOGDescriptor
-setSVMDetector(hg::HOGDescriptor, _svmdetector::InputArray) =
+setSVMDetector(hg::HOGDescriptor, svmdetector::InputArray) =
     ccall((:setSVMDetector, cv2_lib), Void, (Ptr{Void}, Ptr{Void}, ),
-          hg.handle, _svmDetector.handle)
+          hg.handle, svmDetector.handle)
+
+setSVMDetector(hg::HOGDescriptor, svmdetector::Array{Cfloat}) =
+    ccall((:setSVMDetectorWithFloatArray, cv2_lib), Void, (Ptr{Void}, Ptr{Cfloat}, Cint),
+          hg.handle, pointer(svmdetector), length(svmdetector))
 
 # Returns an array of rects and fWeights
 function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0., 

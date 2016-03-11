@@ -32,9 +32,16 @@ void freeHOGDescriptor(cv::HOGDescriptor *hgd)
     delete hgd;
 }
 
-void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *_svmdetector)
+void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *svmdetector)
 {
-    hg->setSVMDetector(*_svmdetector);
+    hg->setSVMDetector(*svmdetector);
+}
+
+void setSVMDetectorWithFloatArray(cv::HOGDescriptor *hg, float *array, int len)
+{
+    std::vector<float> vec;
+    vec.assign(array, array + len);
+    hg->setSVMDetector(cv::InputArray(vec));
 }
 
 cv::Rect **detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img, 
