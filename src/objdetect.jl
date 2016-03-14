@@ -58,7 +58,7 @@ function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0.
     
     nrecs = _nrecs[1]
     nfw = _nfw[1]
-    fwptr = convert(Ptr{Cdouble}, fwptr[1])
+    fwptr = convert(Ptr{Cdouble}, _fwptr[1])
 
     recs = map(_Rect, pointer_to_array(rptr, nrecs, true))
     fw = pointer_to_array(fwptr, nfw, true)
