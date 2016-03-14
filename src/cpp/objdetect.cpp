@@ -56,6 +56,11 @@ cv::Rect **detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img,
 			  *pads, scale, finalThreshold, useMeanshiftGrouping!=0);
 
     *nrecs = foundLocations.size();
+    if (*nrecs == 0) {
+	*fWeights = NULL;
+	*nfw = 0;
+	return NULL;
+    }
     cv::Rect **ret = (cv::Rect **)malloc(sizeof(cv::Rect *) * (*nrecs));
     for (int i = 0; i < *nrecs; i++) {
 	ret[i] = new cv::Rect(foundLocations.at(i));
@@ -64,7 +69,7 @@ cv::Rect **detectMultiScaleHOG(cv::HOGDescriptor* hog, cv::_InputArray *img,
     *nfw = foundWeights.size();
     *fWeights = (double *)malloc(sizeof(double) * (*nfw));
     for (int i = 0; i < *nfw; i++) {
-	*fWeights[i] = foundWeights.at(i);
+	(*fWeights)[i] = foundWeights.at(i);
     }
     return ret;
 }

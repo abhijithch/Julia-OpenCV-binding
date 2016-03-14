@@ -10,7 +10,7 @@ function _CascadeClassifier(ptr::Ptr{Void})
 end
 
 CascadeClassifier() = _CascadeClassifier(ccall((:createCascadeClassifier, cv2_lib),
-                                            Ptr{Void}, ()))
+                                               Ptr{Void}, ()))
 
 CascadeClassifier(path::AbstractString) =
     _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib),
@@ -47,14 +47,18 @@ function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0.
                           finalThreshold = 2.0, useMeanshiftGrouping=false)
     _nrecs = [Cint(0)]
     _nfw = [Cint(0)]
-    _fwptr = [C_NULL]
+    _fwptr = [convert(Ptr{Cdouble}, C_NULL)]
 
-    rptr = ccall((:detectMultiScaleHOG, cv2_lib), Void,
+    rptr = ccall((:detectMultiScaleHOG, cv2_lib), Ptr{Ptr{Void}},
                  (Ptr{Void}, Ptr{Void}, Ptr{Ptr{Cdouble}}, Cdouble, Ptr{Cint}, Ptr{Cint},
                   Cdouble, Cdouble, Cint, Ptr{Cint}, Ptr{Cint}),
                  hog.handle, img.handle, pointer(_fwptr), hitThreshold,
                  winStride.handle, padding.handle, scale, finalThreshold,
                  Cint(useMeanshiftGrouping), pointer(_nrecs), pointer(_nfw))
+
+    if rptr == C_NULL
+        return Rect[], Cdouble[]
+    end
     
     nrecs = _nrecs[1]
     nfw = _nfw[1]
