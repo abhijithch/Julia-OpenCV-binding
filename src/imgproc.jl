@@ -193,17 +193,21 @@ function putText(image::Mat,
     cvOrg = cvPoint(org.x, org.y)
     cvbottomLeftOrigin = Int(bottomLeftOrigin)
     
-    ccall((:putText, "../libcv2.so"), Void,
+    ccall((:putText, cv2_lib), Void,
           (Ptr{Void}, Ptr{Char}, Ptr{Void}, Int,
            Cdouble, Ptr{Void}, Int, Int, Cint),
           image.handle, pointer(text), cvOrg.handle,
           fontFace, fontScale, colorPtr, thickness,
           lineType, cvbottomLeftOrigin)
+
 end
 
-function polylines(image::Mat, points::Array{cv2.Point, 1},
-                   isClosed::Bool, color::Tuple{Int, Int, Int},
-                   thickness::Int = 1, lineType::Int = 8,
+function polylines(image::Mat,
+                   points::Array{cv2.Point, 1},
+                   isClosed::Bool,
+                   color::Tuple{Int, Int, Int},
+                   thickness::Int = 1,
+                   lineType::Int = 8,
                    shift::Int = 0)
 
     cvPts = convertPointArray(points)

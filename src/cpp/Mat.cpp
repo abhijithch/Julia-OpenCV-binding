@@ -209,6 +209,13 @@ cv::Mat* eye(int rows, int cols, int type)
     return eyeMat;
 }
 
+cv::Mat* ones(int rows, int cols, int type)
+{
+    cv::Mat *onesMat = new cv::Mat();
+    *onesMat = cv::Mat::ones(rows, cols, type);
+    return onesMat;
+}
+
 /*
 // C++: static Mat Mat::eye(Size size, int type);
 */

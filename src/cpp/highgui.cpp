@@ -33,3 +33,9 @@ void namedWindow(char *winname, int flags)
 {
   cv::namedWindow(winname);
 }
+
+void imclose(char *winName)
+{
+  cv::destroyWindow(winName);
+}
+

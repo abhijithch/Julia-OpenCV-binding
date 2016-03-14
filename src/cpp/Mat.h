@@ -130,6 +130,9 @@ extern "C" bool empty(cv::Mat *mat);
 // C++: static Mat Mat::eye(int rows, int cols, int type);
 extern "C" cv::Mat* eye(int rows, int cols, int type);
 
+// C++: static Mat Mat::ones(int rows, int cols, int type);
+extern "C" cv::Mat* ones(int rows, int cols, int type);
+
 /*
 // C++: static Mat Mat::eye(Size size, int type);
 extern "C" cv::Mat* eye(Size size, int type);

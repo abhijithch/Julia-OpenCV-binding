@@ -15,8 +15,8 @@ function _Mat(ptr::Ptr{Void})
     return m
 end
 
-Mat(rows::Int32, cols::Int32, matType::Int32) =
-    _Mat(ccall( (:createMat2, cv2_lib), Ptr{Void}, (Int32, Int32, Int32),
+Mat(rows::Int, cols::Int, matType::Int) =
+    _Mat(ccall( (:createMat2, cv2_lib), Ptr{Void}, (Cint, Cint, Cint),
            rows, cols, matType))
 Mat() = _Mat(ccall( (:createMat1, cv2_lib), Ptr{Void}, (), ))
 
@@ -76,6 +76,9 @@ elemSize1(mat::Mat) =
 
 eye(rows::Int, cols::Int, matType::Int) =
     _Mat(ccall( (:eye, cv2_lib), Ptr{Void}, (Int, Int, Int), rows, cols, matType))
+
+ones(rows::Int, cols::Int, matType::Int) =
+    _Mat(ccall((:ones, cv2_lib), Ptr{Void}, (Int, Int, Int), rows, cols, matType))
 
 zeros(rows::Int, cols::Int, matType::Int) =
     _Mat(ccall( (:zeros, cv2_lib), Ptr{Void}, (Int, Int, Int), rows, cols, matType))
