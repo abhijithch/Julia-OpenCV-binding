@@ -1,4 +1,4 @@
-import Base: getindex, setindex!
+import Base: getindex, setindex!, size
 
 type Mat
     handle::Ptr{Void}
@@ -97,6 +97,7 @@ matType(mat::Mat) =
 at(mat::Mat, channel::Int, i::Int, j::Int) =
     ccall( (:at, cv2_lib), Int, (Ptr{Void}, Int, Int, Int),
            mat.handle, channel, i, j)
+size(mat::Mat) = (rows(mat), cols(mat))
 
 
 # Input and Output Array
@@ -202,7 +203,9 @@ for t in [:Cuchar, :Cchar, :Cushort, :Cshort, :Cint, :Cfloat, :Cdouble]
                         (Cint, Ptr{Void}, Cint, Cint),
                         JULIA_TYPE_TO_CV_DEPTH_MAP[$t], img.handle, i-1, j-1)
             ptr = convert(Ptr{$t}, ptr)
-            return pointer_to_array(ptr, nelems, true)
+            ret = pointer_to_array(ptr, nelems, true)
+            length(ret) == 1 && return ret[1]
+            return ret
         end
     end
     eval(q)
@@ -233,14 +236,26 @@ function getindex(img::Mat, i::UnitRange{Int}, j::UnitRange{Int})
     t = CV_DEPTH_TO_JULIA_TYPE_MAP[d]
     rarr = pointer_to_array(convert(Ptr{t}, rptr), nelems, true)
     ch = channels(img)
-    retlen = div(nelems, ch)
-    tuples = Array(Tuple, retlen)
-    loc = 1
-    for ind = 1:retlen
-        tuples[ind] = tuple(rarr[loc : loc + ch - 1]...)
-        loc = ch*ind + 1
+    if ch == 1
+        ret = Array(t, length(i), length(j))
+        count = 1
+        for x = 1:length(i)
+            for y = 1:length(j)
+                ret[x, y] = rarr[count]
+                count += 1
+            end
+        end
+        return ret
     end
-    return reshape(tuples, length(i), length(j))'
+    tuples = Array(Any, length(i), length(j))
+    loc = 1
+    for x = 1:length(i)
+        for y = 1:length(j)
+            tuples[x, y] = rarr[loc : loc + ch - 1]
+            loc += ch
+        end
+    end
+    return tuples
 end
 
 # Set a scalar or vector value to the specified index
@@ -288,9 +303,60 @@ for t in [:Cuchar, :Cchar, :Cushort, :Cshort, :Cint, :Cfloat, :Cdouble]
 end
 
 # Set a scalar or vector value to the specified index
-function setindex!(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}, val)
+function setindex!(img::Mat, val, i::UnitRange{Int}, j::UnitRange{Int})
+    nrows = rows(img)
+    ncols = cols(img)
+
+    i.start < 1 && error("Start of row range cannot be less than 1")
+    i.start > nrows && error("Start of row range $(i.start) is greater than number of rows $nrows")
+    i.stop < 1 && error("Stop of row range cannot be less than 1")
+    i.stop > nrows && error("Stop of row range $(i.stop) is greater than number of rows $nrows")
+
+    j.start < 1 && error("Start of col range cannot be less than 1")
+    j.start > ncols && error("Start of col range $(j.start) is greater than number of cols $ncols")
+    j.stop < 1 && error("Stop of col range cannot be less than 1")
+    j.stop > ncols && error("Stop of col range $(j.stop) is greater than number of cols $ncols")
+
+    ch = channels(img)
+    sz = size(val)
+    isz = (length(i), length(j))
+
+    if sz == (ch,) || sz == ()
+        set_each_value(img, val, i, j)
+    elseif sz == isz
+        set_from_array(img, val, i, j)
+    else
+        errmsg = "Cannot assign array of size $sz, "
+        if ch == 1
+            errmsg = errmsg * "expected a value or an array of dimension $isz"
+        else
+            errmsg = errmsg * "expected a vector of length $ch or an array of vectors of dimension $isz, each with length $ch"
+        end
+        error(errmsg)
+    end
 end
-setindex!(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}, vals::Array) = nothing
+
+function set_from_array(img::Mat, vals::Array, i::UnitRange{Int}, j::UnitRange{Int})
+    sz = size(vals)
+    for x = 1:sz[1]
+        for y = 1:sz[2]
+            img[i.start + x - 1, j.start + y - 1] = vals[x, y]
+        end
+    end
+    return vals
+end
+
+function set_each_value(img::Mat, val, i::UnitRange{Int}, j::UnitRange{Int})
+    ch = channels(img)
+    ellength = length(val)
+    ch != ellength && error("Cannot assign tuples of size $ellength when number of channels in $ch")
+    for x = i
+        for y = j
+            img[x, y] = val
+        end
+    end
+    return val
+end
 
 # TODO: implement endof
 

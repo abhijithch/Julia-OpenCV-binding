@@ -1,6 +1,6 @@
 module LibOpenCV
 
-import Base: >>
+import Base: >>, size
 
 module cv2
 
@@ -19,5 +19,6 @@ end # cv2
 export cv2
 
 >>(x, y) = cv2.(>>)(x, y)
+size(m) = cv2.size(m)
 
 end # LibOpenCV
