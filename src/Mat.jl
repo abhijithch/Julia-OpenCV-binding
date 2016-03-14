@@ -184,6 +184,12 @@ const JULIA_TYPE_TO_CV_DEPTH_MAP =
 
 # Returns scalar or vector of required type, depends on type of Mat.
 function getindex(img::Mat, i::Int, j::Int)
+    nrows = rows(img)
+    ncols = cols(img)
+    i < 1 && error("Row index cannot be less than 1")
+    i > nrows && error("Row index cannot be greater than number of rows $nrows")
+    j < 1 && error("Column index cannot be less than 1")
+    i > ncols && error("Column index cannot be greater than number of columns $ncols")
     t = CV_DEPTH_TO_JULIA_TYPE_MAP[depth(img)]     # Type of each cell
     nelems = channels(img)
     return getindex_by_type(t, nelems, img, i, j)
@@ -194,7 +200,7 @@ for t in [:Cuchar, :Cchar, :Cushort, :Cshort, :Cint, :Cfloat, :Cdouble]
         function getindex_by_type(::Type{$t}, nelems, img, i, j)
             ptr = ccall((:mat_getindex_dispatcher, cv2_lib), Ptr{Void},
                         (Cint, Ptr{Void}, Cint, Cint),
-                        JULIA_TYPE_TO_CV_DEPTH_MAP[$t], img.handle, i, j)
+                        JULIA_TYPE_TO_CV_DEPTH_MAP[$t], img.handle, i-1, j-1)
             ptr = convert(Ptr{$t}, ptr)
             return pointer_to_array(ptr, nelems, true)
         end
@@ -203,10 +209,48 @@ for t in [:Cuchar, :Cchar, :Cushort, :Cshort, :Cint, :Cfloat, :Cdouble]
 end
 
 # Return values as julia array
-getindex(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}) = nothing
+function getindex(img::Mat, i::UnitRange{Int}, j::UnitRange{Int})
+    nrows = rows(img)
+    ncols = cols(img)
+
+    i.start < 1 && error("Start of row range cannot be less than 1")
+    i.start > nrows && error("Start of row range $(i.start) is greater than number of rows $nrows")
+    i.stop < 1 && error("Stop of row range cannot be less than 1")
+    i.stop > nrows && error("Stop of row range $(i.stop) is greater than number of rows $nrows")
+
+    j.start < 1 && error("Start of col range cannot be less than 1")
+    j.start > ncols && error("Start of col range $(j.start) is greater than number of cols $ncols")
+    j.stop < 1 && error("Stop of col range cannot be less than 1")
+    j.stop > ncols && error("Stop of col range $(j.stop) is greater than number of cols $ncols")
+
+    _nelems = [Cint(0)]
+    d = depth(img)
+    rptr = ccall((:mat_getindex_range_dispatcher, cv2_lib), Ptr{Void},
+                 (Cint, Ptr{Void}, Cint, Cint, Cint, Cint, Ptr{Cint}),
+                 d, img.handle, i.start - 1, i.stop,
+                 j.start - 1, j.stop, pointer(_nelems))
+    nelems = _nelems[1]
+    t = CV_DEPTH_TO_JULIA_TYPE_MAP[d]
+    rarr = pointer_to_array(convert(Ptr{t}, rptr), nelems, true)
+    ch = channels(img)
+    retlen = div(nelems, ch)
+    tuples = Array(Tuple, retlen)
+    loc = 1
+    for ind = 1:retlen
+        tuples[ind] = tuple(rarr[loc : loc + ch - 1]...)
+        loc = ch*ind + 1
+    end
+    return reshape(tuples, length(i), length(j))'
+end
 
 # Set a scalar or vector value to the specified index
 function setindex!(img::Mat, val, i::Int, j::Int)
+    nrows = rows(img)
+    ncols = cols(img)
+    i < 1 && error("Row index cannot be less than 1")
+    i > nrows && error("Row index cannot be greater than number of rows $nrows")
+    j < 1 && error("Column index cannot be less than 1")
+    i > ncols && error("Column index cannot be greater than number of columns $ncols")
     _val = isa(val, Array) ? val : [val]
     _setindex(img, _val, i, j)
 end
@@ -216,9 +260,7 @@ function _setindex(img::Mat, val, i::Int, j::Int)
     nelems = channels(img)
 
     # Check whether val is of required type and length.
-    if length(val) != nelems
-        error("Cannot assign vector of size $(length(val)) when image has $nelems channels")
-    end
+    length(val) != nelems && error("Cannot assign vector of size $(length(val)) when image has $nelems channels")
 
     conval = []
     try
@@ -239,14 +281,15 @@ for t in [:Cuchar, :Cchar, :Cushort, :Cshort, :Cint, :Cfloat, :Cdouble]
         function setindex_by_type(::Type{$t}, img, val, i, j)
             ccall((:mat_setindex_dispatcher, cv2_lib), Void,
                   (Cint, Ptr{Void}, Cint, Cint, Ptr{$t}),
-                  JULIA_TYPE_TO_CV_DEPTH_MAP[$t], img.handle, i, j, pointer(val))
+                  JULIA_TYPE_TO_CV_DEPTH_MAP[$t], img.handle, i - 1, j - 1, pointer(val))
         end
     end
     eval(q)
 end
 
 # Set a scalar or vector value to the specified index
-setindex!(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}, val) = nothing
+function setindex!(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}, val)
+end
 setindex!(img::Mat, i::UnitRange{Int}, j::UnitRange{Int}, vals::Array) = nothing
 
 # TODO: implement endof

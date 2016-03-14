@@ -271,5 +271,20 @@ extern "C" void mat_setindex_Cfloat(cv::Mat *m, int i, int j, float *val);
 extern "C" void mat_setindex_Cdouble(cv::Mat *m, int i, int j, double *val);
 extern "C" void mat_setindex_dispatcher(int type, cv::Mat *m, int i, int j, void *val);
 
+extern "C" void *mat_getindex_range_dispatcher(int type, cv::Mat *m, int il,
+					       int ih, int jl, int jh, int *);
+
+#define DECL_MAT_GETINDEX_RANGE(FUNC, CV_TYPE)				\
+extern "C" CV_TYPE *mat_getindex_range_##FUNC(cv::Mat *, int,           \
+					      int, int, int, int *);
+
+DECL_MAT_GETINDEX_RANGE(Cuchar, unsigned char)
+DECL_MAT_GETINDEX_RANGE(Cchar, char)
+DECL_MAT_GETINDEX_RANGE(Cushort, unsigned short)
+DECL_MAT_GETINDEX_RANGE(Cshort, short)
+DECL_MAT_GETINDEX_RANGE(Cint, int)
+DECL_MAT_GETINDEX_RANGE(Cfloat, float)
+DECL_MAT_GETINDEX_RANGE(Cdouble, double)
+
 #endif 
 // MAT_H

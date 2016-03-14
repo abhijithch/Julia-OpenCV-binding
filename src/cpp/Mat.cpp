@@ -783,25 +783,70 @@ void mat_setindex_dispatcher(int type, cv::Mat *m, int i, int j, void *val)
 {
     switch(type) {
     case CV_8U:
-	return mat_setindex_Cuchar(m, i, j, (unsigned char *)val);
+	mat_setindex_Cuchar(m, i, j, (unsigned char *)val);
 	break;
     case CV_8S:
-	return mat_setindex_Cchar(m, i, j, (char *)val);
+	mat_setindex_Cchar(m, i, j, (char *)val);
 	break;
     case CV_16U:
-	return mat_setindex_Cushort(m, i, j, (unsigned short *)val);
+	mat_setindex_Cushort(m, i, j, (unsigned short *)val);
 	break;
     case CV_16S:
-	return mat_setindex_Cshort(m, i, j, (short *)val);
+	mat_setindex_Cshort(m, i, j, (short *)val);
 	break;
     case CV_32S:
-	return mat_setindex_Cint(m, i, j, (int *)val);
+	mat_setindex_Cint(m, i, j, (int *)val);
 	break;
     case CV_32F:
-	return mat_setindex_Cfloat(m, i, j, (float *)val);
+	mat_setindex_Cfloat(m, i, j, (float *)val);
 	break;
     case CV_64F:
-	return mat_setindex_Cdouble(m, i, j, (double *)val);
+	mat_setindex_Cdouble(m, i, j, (double *)val);
 	break;
     }
+}
+
+
+/* Ranged getindex and setindex */
+
+#define MAT_GETINDEX_RANGE(FUNC, CV_TYPE)			 \
+CV_TYPE *mat_getindex_range_##FUNC(cv::Mat *m, int il, int ih,   \
+				   int jl, int jh, int *nelems)	 \
+{                                                                \
+    cv::Range row(il, ih), col(jl, jh);                          \
+    cv::Mat submat(*m, row, col);                                \
+    CV_TYPE *ret = (CV_TYPE *)malloc(submat.elemSize() *         \
+				     submat.total());            \
+    cv::Mat pix(submat.rows, submat.cols, submat.type(), ret);   \
+    submat.copyTo(pix);                                          \
+    *nelems = submat.total() * submat.channels();                \
+    return ret;                                                  \
+}
+
+MAT_GETINDEX_RANGE(Cuchar, unsigned char)
+MAT_GETINDEX_RANGE(Cchar, char)
+MAT_GETINDEX_RANGE(Cushort, unsigned short)
+MAT_GETINDEX_RANGE(Cshort, short)
+MAT_GETINDEX_RANGE(Cint, int)
+MAT_GETINDEX_RANGE(Cfloat, float)
+MAT_GETINDEX_RANGE(Cdouble, double)
+
+#define CASE_MAT_GETINDEX_RANGE(FUNC, DEPTH) \
+    case DEPTH: \
+    return mat_getindex_range_##FUNC(m, il, ih, jl, jh, nelems); \
+break;
+
+void *mat_getindex_range_dispatcher(int type, cv::Mat *m, int il,
+				    int ih, int jl, int jh, int *nelems)
+{
+    switch(type) {
+	CASE_MAT_GETINDEX_RANGE(Cuchar, CV_8U);
+	CASE_MAT_GETINDEX_RANGE(Cchar, CV_8S);
+	CASE_MAT_GETINDEX_RANGE(Cushort, CV_16U);
+	CASE_MAT_GETINDEX_RANGE(Cshort, CV_16S);
+	CASE_MAT_GETINDEX_RANGE(Cint, CV_32S);
+	CASE_MAT_GETINDEX_RANGE(Cfloat, CV_32F);
+	CASE_MAT_GETINDEX_RANGE(Cdouble, CV_64F);
+    }
+    return NULL;
 }
