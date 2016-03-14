@@ -276,7 +276,7 @@ function resize(src::InputArray, dst::OutputArray, dsize::Tuple{Int, Int},
     sizePtr = [sizeX, sizeY]
 
     ccall((:resize, cv2_lib), Void,
-          (Ptr{Void}, Ptr{Void}, Ptr{Int32}, Float64, Cint,),
+          (Ptr{Void}, Ptr{Void}, Ptr{Int32}, Float64, Float64, Cint,),
           src.handle, dst.handle, sizePtr, fx, fy, interpolation)
 end
 
@@ -314,7 +314,7 @@ function GaussianBlur(src::InputArray, dst::OutputArray,
     sizeX = convert(Int32, ksize[1])
     sizeY = convert(Int32, ksize[2])
     sizePtr = [sizeX, sizeY]
-    ccall((:GaussianBlur, vc2_lib), Void,
+    ccall((:GaussianBlur, cv2_lib), Void,
           (Ptr{Void}, Ptr{Void}, Ptr{Int32}, Float64, Float64, Cint,),
           src.handle, dst.handle, sizePtr, sigmaX, sigmaY, borderType)
 end

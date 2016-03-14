@@ -131,3 +131,41 @@ function test_histogram()
     cv2.imclose("HistImage")
 end                
 
+function test_GaussianBlur()
+    println("test GaussianBlur function.")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    inarr = cv2.InputArray(img)
+    gimg = cv2.Mat(100, 100, cv2.matType(img))
+    outarr = cv2.OutputArray(gimg)
+    cv2.GaussianBlur(inarr, outarr, (5,5),2.0,0.0,1)
+    cv2.imshow("GS", gimg)
+    cv2.waitKey(5)
+    cv2.imclose("GS")
+end
+
+function test_HoughLinesP()
+    println("test HoughLinesP function.")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    inarr = cv2.InputArray(img)
+    gimg = cv2.Mat(100, 100, cv2.matType(img))
+    outarr = cv2.OutputArray(gimg)
+    cv2.GaussianBlur(inarr, outarr, (5,5),2.0,0.0,1)
+    cv2.imshow("GS", gimg)
+    cv2.waitKey(5)
+    cv2.imclose("GS")
+end
+
+function test_Canny()
+    println("test Canny function.")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    inarr = cv2.InputArray(img)
+    gimg = cv2.Mat(100, 100, cv2.matType(img))
+    outarr = cv2.OutputArray(gimg)
+    cv2.Canny(inarr, outarr, 50, 200, 3)
+    cv2.imshow("canny", gimg)
+    cv2.waitKey(5)
+    cv2.imclose("canny")
+end
