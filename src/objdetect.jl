@@ -16,8 +16,10 @@ CascadeClassifier(path::AbstractString) =
     _CascadeClassifier(ccall((:createCascadeClassifierWithString, cv2_lib),
                              Ptr{Void}, (Cstring, ), path))
 
-load(cc::CascadeClassifier, path::AbstractString) =
-    ccall((:loadCCFromFile, cv2_lib), Void, (Ptr{Void}, Cstring), cc.handle, path)
+function load(cc::CascadeClassifier, path::AbstractString)
+    status = ccall((:loadCCFromFile, cv2_lib), Cint, (Ptr{Void}, Cstring), cc.handle, path)
+    status == 0 && error("Loading classifier file unsuccessful. Please try providing full path.")
+end
 
 type HOGDescriptor
     handle::Ptr{Void}
@@ -86,14 +88,14 @@ function getDaimlerPeopleDetector(hog::HOGDescriptor)
 end
 
 # Returns an array of rects and numDetects
-function detectMultiScale(cc::CascadeClassifier, image::InputArray, scaleFactor = 1.1,
+function detectMultiScale(cc::CascadeClassifier, image::InputArray; scaleFactor = 1.1,
                           minNeighbors = 3, flags = 0, minSize = Size(),
                           maxSize = Size())
     minNeighbors = convert(Cint, minNeighbors)
     flags = convert(Cint, flags)
     _nrecs = [Cint(0)]
     _ndetects = [Cint(0)]
-    _ndptr = [C_NULL]
+    _ndptr = [convert(Ptr{Cint}, C_NULL)]
     rptr = ccall((:detectMultiScaleCC1, cv2_lib), Ptr{Ptr{Void}},
                  (Ptr{Void}, Ptr{Void}, Ptr{Ptr{Cint}}, Cdouble, Cint, Cint, Ptr{Void},
                   Ptr{Void}, Ptr{Cint}, Ptr{Cint}),
@@ -108,9 +110,10 @@ function detectMultiScale(cc::CascadeClassifier, image::InputArray, scaleFactor 
 end
 
 # Returns an array of rects, rejectLevels and levelWeights
-function detectMultiScale(cc::CascadeClassifier, image::InputArray, scaleFactor = 1.1,
-                          minNeighbors = 3, flags = 0, minSize = Size(),
-                          maxSize = Size(), outputRejectLevels=false)
+function detectMultiScaleRejectLevels(cc::CascadeClassifier, image::InputArray;
+                                      scaleFactor = 1.1, minNeighbors = 3, flags = 0,
+                                      minSize = Size(), maxSize = Size(),
+                                      outputRejectLevels=false)
     minNeighbors = convert(Cint, minNeighbors)
     flags = convert(Cint, flags)
     _nrecs = [Cint(0)]

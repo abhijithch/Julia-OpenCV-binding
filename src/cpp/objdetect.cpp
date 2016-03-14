@@ -17,9 +17,9 @@ void freeCascadeClassifier(cv::CascadeClassifier* cc)
     delete cc;
 }
 
-void loadCCFromFile(cv::CascadeClassifier* cc, char* path)
+int loadCCFromFile(cv::CascadeClassifier* cc, char* path)
 {
-    cc->load(path);
+    return cc->load(path) ? 1 : 0;
 }
 
 cv::HOGDescriptor* createHOGDescriptor()
@@ -117,7 +117,7 @@ cv::Rect **detectMultiScaleCC1(cv::CascadeClassifier *cc, cv::_InputArray *image
     *ndetects = numDetectionsVec.size();
     *numDetections = (int *)malloc(sizeof(int) * (*ndetects));
     for (int i = 0; i < *ndetects; i++) {
-	*numDetections[i] = numDetectionsVec.at(i);
+	(*numDetections)[i] = numDetectionsVec.at(i);
     }
     return ret;
 }
@@ -144,13 +144,13 @@ cv::Rect **detectMultiScaleCC2(cv::CascadeClassifier *cc, cv::_InputArray *image
     *nrl = rejectLevelsVec.size();
     *rejectLevels = (int *)malloc(sizeof(int) * (*nrl));
     for (int i = 0; i < *nrl; i++) {
-	*rejectLevels[i] = rejectLevelsVec.at(i);
+	(*rejectLevels)[i] = rejectLevelsVec.at(i);
     }
 
     *nlw = levelWeightsVec.size();
     *levelWeights = (double *)malloc(sizeof(double) * (*nlw));
     for (int i = 0; i < *nlw; i++) {
-	*levelWeights[i] = levelWeightsVec.at(i);
+	(*levelWeights)[i] = levelWeightsVec.at(i);
     }
 
     return ret;

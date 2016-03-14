@@ -5,7 +5,7 @@
 extern "C" cv::CascadeClassifier* createCascadeClassifier();
 extern "C" cv::CascadeClassifier* createCascadeClassifierWithString(char* path);
 extern "C" void freeCascadeClassifer(cv::CascadeClassifier* cc);
-extern "C" void loadCCFromFile(cv::CascadeClassifier* cc, char* path);
+extern "C" int loadCCFromFile(cv::CascadeClassifier* cc, char* path);
 extern "C" cv::HOGDescriptor* createHOGDescriptor();
 extern "C" void freeHOGDescriptor(cv::HOGDescriptor *);
 extern "C" void setSVMDetector(cv::HOGDescriptor *hg, cv::_InputArray *svmdetector);
