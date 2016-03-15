@@ -1,4 +1,4 @@
-@windows_only ENV["PATH"] *=  ";" * joinpath(Pkg.dir("LibOpenCV"), "deps", "windows")
+@windows_only ENV["PATH"] *= ";" * joinpath(Pkg.dir("LibOpenCV"), "deps", "windows", "bin")
 
 function loadlib()
     global cv2_lib
