@@ -1,12 +1,18 @@
-function minMaxLoc(src::InputArray, mask::InputArray)
+function minMaxLoc(src::InputArray, mask::InputArray=cv2.InputArray(cv2.Mat()))
 
-    minVal = zeros(Float64, 1)
-    maxVal = zeros(Float64, 1)
-    minLoc = cv2.Point(C_NULL)
-    maxLoc = cv2.Point(C_NULL)
+    minVal_ = Base.zeros(Cdouble, 1)
+    maxVal_ = Base.zeros(Cdouble, 1)
+    minLoc_ = [C_NULL]
+    maxLoc_ = [C_NULL]
 
-    ccall((:minMaxLoc, cv2_lib), Void, (Ptr{Void}, Ptr{Float64}, Ptr{Float64}, Ptr{Void}, Ptr{Void}, Ptr{Void},), src.handle, minVal, maxVal, minLoc.handle, maxLoc.handle, mask.handle)
+    ccall((:minMaxLoc, cv2_lib), Void,
+          (Ptr{Void}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Void}, Ptr{Void}, Ptr{Void},),
+          src.handle, pointer(minVal_), pointer(maxVal_),
+          pointer(minLoc_), pointer(maxLoc_), mask.handle)
 
+    minVal = minVal_[1]
+    maxVal = maxVal_[1]
+    minLoc = Point(minLoc_[1])
+    maxLoc = Point(maxLoc_[1])
     return minVal, maxVal, minLoc, maxLoc
-
 end

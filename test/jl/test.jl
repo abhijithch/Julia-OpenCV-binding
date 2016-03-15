@@ -144,17 +144,22 @@ function test_GaussianBlur()
     cv2.imclose("GS")
 end
 
-function test_HoughLinesP()
-    println("test HoughLinesP function.")
+function test_resize()
+    println("test resize.")
 
     img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
     inarr = cv2.InputArray(img)
-    gimg = cv2.Mat(100, 100, cv2.matType(img))
+    gimg = cv2.clone(img)
     outarr = cv2.OutputArray(gimg)
-    cv2.GaussianBlur(inarr, outarr, (5,5),2.0,0.0,1)
-    cv2.imshow("GS", gimg)
-    cv2.waitKey(5)
-    cv2.imclose("GS")
+    println("Before resize.")
+    cv2.imshow("rs",gimg)
+    cv2.waitKey(30)
+    cv2.imclose("rs")
+    cv2.resize(inarr, outarr, (50,50),2.0,2.0,0)
+    cv2.imshow("rs",gimg)
+    cv2.waitKey(30)
+    cv2.imclose("rs")
+    
 end
 
 function test_Canny()
@@ -168,4 +173,82 @@ function test_Canny()
     cv2.imshow("canny", gimg)
     cv2.waitKey(5)
     cv2.imclose("canny")
+end
+
+function test_getDefaultPeopleDetector()
+    #People detector test
+    h = cv2.HOGDescriptor()
+    out = cv2.getDefaultPeopleDetector(h)
+    @test length(out) == 3781
+    @test sum(out) - 17.829723 < 1e-4
+end
+
+function test_getDaimlerPeopleDetector()
+    h = cv2.HOGDescriptor()
+    out = cv2.getDaimlerPeopleDetector(h)
+    @test length(out) == 1981
+    @test sum(out) - 17.829723 < 1e-4
+end
+
+function test_HoughLinesP()
+    println("test HoughLinesP")
+    
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    gimg = cv2.Mat()
+    inarr = cv2.InputArray(img)
+    outarr = cv2.OutputArray(gimg)
+    cv2.cvtColor(inarr, outarr, cv2.CV_BGR2GRAY)
+    hin = cv2.InputArray(gimg)
+    lines = cv2.HoughLinesP(hin, 1.0, cv2.CV_PI/180.0, 50, 60.0, 5.0)
+        
+end
+
+function test_namedWindow()
+    println("test namedWindow function")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    cv2.namedWindow("test", 1)
+    cv2.imshow("test", img)
+    cv2.waitKey(5)
+    cv2.imclose("test")
+end
+
+
+function test_HOGDescriptor()
+    println("test HOGDescriptor, getDefaultPeopleDetector, setSVMDetector, detectMultiScale.")
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "test", "jl", "people-01.jpg"))
+
+    hog = cv2.HOGDescriptor()
+    def = cv2.getDefaultPeopleDetector(hog)
+    cv2.setSVMDetector(hog, def)
+    rects, weights = cv2.detectMultiScale(hog,cv2.InputArray(img))
+end
+
+function test_CascadeClassifier()
+    println("test ")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "test", "sample.jpg"))
+    carCascade = cv2.CascadeClassifier()
+    cv2.load(carCascade, joinpath(Pkg.dir("LibOpenCV"), "test", "haarcascade_cars3.xml"))
+    inarr = cv2.InputArray(img)
+    recs, nl, lw = cv2.detectMultiScaleRejectLevels(carCascade, inarr, outputRejectLevels=true)
+end
+
+function test_threshold()
+    println("test thrshold")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    inarr = cv2.InputArray(img)
+    oimg = cv2.clone(img)
+    outarr = cv2.OutputArray(oimg)
+    cv2.threshold(inarr, outarr, 0.0, 255, 1)
+end
+
+function test_minMaxLoc()
+    prinlnt("test minMaxLoc")
+
+    img = cv2.imread(joinpath(Pkg.dir("LibOpenCV"), "doc", "figures", "Lena.jpg"))
+    inarr = cv2.InputArray(img)
+    cv2.minMaxLoc(inarr)
+
 end
