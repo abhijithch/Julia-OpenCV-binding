@@ -145,7 +145,7 @@ type Rect
 end
 
 function _Rect(ptr::Ptr{Void})
-    rec = InputArray(ptr)
+    rec = Rect(ptr)
     finalizer(rec, x -> ccall((:freeRect, cv2_lib),
                               Void, (Ptr{Void}, ), x.handle))
     return rec

@@ -124,19 +124,26 @@ function line(image::Mat,
           thickness, lineType, shift)
 end
 
-function rectangle(image::Mat,
-              color::Tuple{Int64, Int64, Int64},
-              p1::cv2.Point,
-              p2::cv2.Point,
-              thickness::Int64 = 1,
-              lineType::Int64 = 8,
-              shift::Int64 = 0)
+function rectangle(image::Mat, color::Tuple{Int64, Int64, Int64},
+                   p1::cv2.Point, p2::cv2.Point,
+                   thickness::Int64 = 1, lineType::Int64 = 8,
+                   shift::Int64 = 0)
     colorPtr = convertColortoPtr(color)
     cvPt1 = cvPoint(p1.x, p1.y)
     cvPt2 = cvPoint(p2.x, p2.y)
     ccall((:rectangle, cv2_lib), Void,
           (Ptr{Void}, Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int),
           image.handle, cvPt1.handle, cvPt2.handle, colorPtr,
+          thickness, lineType, shift)
+end
+
+function rectangle(image::Mat, color::Tuple{Int64, Int64, Int64},
+                   r::Rect, thickness::Int64 = 1, lineType::Int64 = 8,
+                   shift::Int64 = 0)
+    colorPtr = convertColortoPtr(color)
+    ccall((:rectangleWithRect, cv2_lib), Void,
+          (Ptr{Void}, Ptr{Void}, Ptr{Void}, Int, Int, Int),
+          image.handle, r.handle, colorPtr,
           thickness, lineType, shift)
 end
 

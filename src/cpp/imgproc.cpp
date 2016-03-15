@@ -44,7 +44,15 @@ cv::Mat* blur(cv::Mat *img, int *size, cv::Point *anchor, int borderType)
 void rectangle(cv::Mat *img, cv::Point *p1, cv::Point *p2, int *color,
 	       int thickness, int lineType, int shift)
 {
-    cv::rectangle(*img, *p1, *p2,  cv::Scalar(color[0], color[1], color[2]));
+    cv::rectangle(*img, *p1, *p2, cv::Scalar(color[0], color[1], color[2]),
+		  thickness, lineType, shift);
+}
+
+void rectangleWithRect(cv::Mat *img, cv::Rect *r, int *color,
+		       int thickness, int lineType, int shift)
+{
+    cv::rectangle(*img, *r, cv::Scalar(color[0], color[1], color[2]),
+		  thickness, lineType, shift);
 }
 
 void circle(cv::Mat *img, cv::Point *p1, int radius, int *color, int thickness,
