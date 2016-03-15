@@ -58,11 +58,8 @@ function detectMultiScale(hog::HOGDescriptor, img::InputArray, hitThreshold = 0.
                  winStride.handle, padding.handle, scale, finalThreshold,
                  Cint(useMeanshiftGrouping), pointer(_nrecs), pointer(_nfw))
 
-    if rptr == C_NULL
-        return Rect[], Cdouble[]
-    end
-    
     nrecs = _nrecs[1]
+    nrecs == 0 && return Rect[], Cdouble[]
     nfw = _nfw[1]
     fwptr = convert(Ptr{Cdouble}, _fwptr[1])
 
